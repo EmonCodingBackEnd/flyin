@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.coding.flyin</groupId>
+        <artifactId>flyin-starter</artifactId>
+        <version>0.0.1</version>
+    </parent>
+
+    <artifactId>flyin-ftp-spring-boot-starter</artifactId>
+
+    <name>flyin-ftp-spring-boot-starter</name>
+
+    <dependencies>
+        <!-- 引入三方包 beg -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!-- 引入三方包 end -->
+
+        <!-- 引入二方包 beg -->
+        <!-- 引入二方包 end -->
+
+        <!-- 引入一方包 beg -->
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-util</artifactId>
+        </dependency>
+        <!-- 引入一方包 end -->
+    </dependencies>
+</project>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.coding.flyin</groupId>
+        <artifactId>flyin-dependencies</artifactId>
+        <version>0.0.1</version>
+        <relativePath>../flyin-dependencies/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>flyin-parent</artifactId>
+    <packaging>pom</packaging>
+
+    <name>flyin-parent</name>
+
+    <dependencies>
+        <!-- 引入三方包 beg -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 提供常用编码隐式编译的支持 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--数据映射/拷贝的框架 -->
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--bean自动装配-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--生成配置元数据<spring-configuration-metadata.json>，
+            从 @ConfigurationProperties 注释生成自己的配置元数据文件，辅助yml配置时自动提示 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--对微服务端点进行管理和配置监控-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--解析JSON到对象推荐-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <!-- 引入三方包 end -->
+
+        <!-- 引入二方包 beg -->
+        <!-- 引入二方包 end -->
+
+        <!-- 引入一方包 beg -->
+        <!-- 引入一方包 end -->
+    </dependencies>
+
+</project>
