@@ -103,6 +103,7 @@ public class TargetPoint {
             MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
             targetPoint.setMethod(methodSignature.getMethod());
             targetPoint.setArgNames(methodSignature.getParameterNames());
+            targetPoint.setReturnType(methodSignature.getReturnType());
         }
         return targetPoint;
     }

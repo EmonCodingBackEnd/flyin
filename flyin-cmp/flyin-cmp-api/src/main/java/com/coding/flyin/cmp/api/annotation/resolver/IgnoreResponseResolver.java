@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.annotation.PostConstruct;
@@ -18,13 +17,15 @@ import javax.annotation.PostConstruct;
  * 统一响应.
  *
  * <p>创建时间: <font style="color:#00FFFF">20191130 12:02</font><br>
- * [请在此输入功能详述]
+ * Deprecated：ResponseBodyAdvice是一个很鸡肋的功能，默认启用了GlobalExceptionInterceptor，废弃了这个配置；<br>
+ * 如果需要使用请打开 @RestControllerAdvice 注解
  *
  * @author Rushing0711
  * @version 1.0.0
  * @since 1.0.0
  */
-@RestControllerAdvice
+@Deprecated
+// @RestControllerAdvice
 @Slf4j
 public class IgnoreResponseResolver implements ResponseBodyAdvice<Object> {
 

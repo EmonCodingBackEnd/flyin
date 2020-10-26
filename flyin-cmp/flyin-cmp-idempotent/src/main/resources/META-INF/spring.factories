@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.coding.flyin.cmp.idempotent.annotation.resolver.config.NonIdempotentConfig,\
+com.coding.flyin.cmp.idempotent.annotation.resolver.NonIdempotentResolver,\
+com.coding.flyin.cmp.idempotent.NonIdempotentSupport

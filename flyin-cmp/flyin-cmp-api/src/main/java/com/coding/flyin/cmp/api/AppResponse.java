@@ -8,13 +8,13 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public abstract class AppResponse<T> implements Serializable {
+public class AppResponse<T> implements Serializable {
 
     private static final long serialVersionUID = -4627150270589944255L;
 
     protected String errorCode = AppStatus.SUCCESS.getErrorCode();
 
-    protected String errorMessage = AppStatus.SUCCESS.getErrorMessage();
+    protected String errorMessage = "成功";
 
     protected T data;
 

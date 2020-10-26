@@ -47,7 +47,7 @@ public class NonIdempotentSupport {
         }
         String requestId = UUID.randomUUID().toString();
         if (!setCache.add(requestId, 5, TimeUnit.MINUTES)) {
-            log.error("【幂等校验】获取requestId失，服务端保存失败");
+            log.error("【幂等校验】获取requestId失败，服务端保存失败");
             throw new AppException(AppStatus.U0507, "获取requestId失败");
         }
         return requestId;
@@ -58,8 +58,8 @@ public class NonIdempotentSupport {
             log.warn("【幂等校验】requestId为空，默认校验结果为 false");
             return false;
         } else {
-            RSet<String> set = redisson.getSet(nonIdempotentConfig.getRedisKey(), codec);
-            return set.remove(requestId);
+            RSetCache<String> setCache = redisson.getSetCache(nonIdempotentConfig.getRedisKey(), codec);
+            return setCache.remove(requestId);
         }
     }
 }

@@ -8,7 +8,7 @@ import java.lang.reflect.ParameterizedType;
 
 @Getter
 @Setter
-public abstract class AppRequest<T extends AppResponse> implements Serializable {
+public class AppRequest<T extends AppResponse> implements Serializable {
 
     private static final long serialVersionUID = -311322238195233470L;
 
