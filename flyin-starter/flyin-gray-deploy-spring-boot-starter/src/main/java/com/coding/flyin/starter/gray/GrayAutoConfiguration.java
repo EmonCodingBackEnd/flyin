@@ -36,7 +36,7 @@ public class GrayAutoConfiguration {;
     /** 微服务之间通过Feign调用时拦截并加入x-rule规则. */
     @LoadBalanced
     @Bean
-    RestTemplate restTemplate() {
+    RestTemplate restTemplateForFeign() {
         GrayHttpRequestInterceptor interceptor = new GrayHttpRequestInterceptor();
         interceptor.setRuleProperties(ruleProperties);
 
