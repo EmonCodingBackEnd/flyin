@@ -8,10 +8,18 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
+
 @ControllerAdvice
 @ConditionalOnMissingBean(annotation = DisableGlobalExceptionInterceptor.class)
 @Slf4j
 public class GlobalExceptionInterceptor {
+
+    @PostConstruct
+    public void init() {
+        log.info(
+                "【全局异常处理】GlobalExceptionInterceptor has been initialized, you can use annotation @DisableGlobalExceptionInterceptor disable and custom by @ControllerAdvice");
+    }
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody

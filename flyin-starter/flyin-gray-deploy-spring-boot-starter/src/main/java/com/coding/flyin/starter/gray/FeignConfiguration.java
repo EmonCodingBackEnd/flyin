@@ -1,5 +1,6 @@
 package com.coding.flyin.starter.gray;
 
+import com.coding.flyin.starter.gray.interceptor.FeignHeaderRequestInterceptor;
 import com.coding.flyin.starter.gray.properties.RequestRuleProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

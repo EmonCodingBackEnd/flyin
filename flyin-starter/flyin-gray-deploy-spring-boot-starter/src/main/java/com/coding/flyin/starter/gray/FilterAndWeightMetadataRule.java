@@ -1,5 +1,6 @@
 package com.coding.flyin.starter.gray;
 
+import com.coding.flyin.starter.gray.interceptor.GrayInterceptorHelper;
 import com.coding.flyin.starter.gray.request.rule.FilterRequestRule;
 import com.netflix.loadbalancer.Server;
 import com.netflix.loadbalancer.ZoneAvoidanceRule;
@@ -23,7 +24,7 @@ public class FilterAndWeightMetadataRule extends ZoneAvoidanceRule {
         if (CollectionUtils.isEmpty(serverList)) {
             return null;
         }
-        FilterRequestRule rule = GrayHeaderInterceptor.rule.get();
+        FilterRequestRule rule = GrayInterceptorHelper.rule.get();
         Server server;
         if (rule != null) {
             server = choose(rule.filter(serverList));

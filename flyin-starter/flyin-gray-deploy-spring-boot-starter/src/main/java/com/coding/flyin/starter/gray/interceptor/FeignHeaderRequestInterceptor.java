@@ -1,7 +1,7 @@
-package com.coding.flyin.starter.gray;
+package com.coding.flyin.starter.gray.interceptor;
 
-import com.coding.flyin.starter.gray.properties.RequestRuleProperties;
 import com.coding.flyin.starter.gray.constant.GrayConstants;
+import com.coding.flyin.starter.gray.properties.RequestRuleProperties;
 import com.coding.flyin.starter.gray.request.rule.FilterRequestRule;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -16,7 +16,7 @@ public class FeignHeaderRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        FilterRequestRule rule = GrayHeaderInterceptor.rule.get();
+        FilterRequestRule rule = GrayInterceptorHelper.rule.get();
         if (rule != null) {
             requestTemplate.header(GrayConstants.RULE_HEADER, rule.toRule());
         }

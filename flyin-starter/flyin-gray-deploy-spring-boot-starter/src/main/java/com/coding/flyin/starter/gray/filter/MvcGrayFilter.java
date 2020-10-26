@@ -1,8 +1,8 @@
 package com.coding.flyin.starter.gray.filter;
 
-import com.coding.flyin.starter.gray.GrayHeaderInterceptor;
-import com.coding.flyin.starter.gray.properties.RequestRuleProperties;
 import com.coding.flyin.starter.gray.constant.GrayConstants;
+import com.coding.flyin.starter.gray.interceptor.GrayInterceptorHelper;
+import com.coding.flyin.starter.gray.properties.RequestRuleProperties;
 import com.coding.flyin.starter.gray.request.rule.FilterRequestRule;
 import com.coding.flyin.starter.gray.request.rule.RequestRuleFactory;
 import lombok.Setter;
@@ -27,11 +27,11 @@ public class MvcGrayFilter extends OncePerRequestFilter {
         String labels = request.getHeader(GrayConstants.RULE_HEADER);
         FilterRequestRule rule = RequestRuleFactory.create(labels);
         labels = ruleProperties.updateRule(rule);
-        GrayHeaderInterceptor.initHystrixRequestContext(labels);
+        GrayInterceptorHelper.initHystrixRequestContext(labels);
         try {
             filterChain.doFilter(request, response);
         } finally {
-            GrayHeaderInterceptor.shutdownHystrixRequestContext();
+            GrayInterceptorHelper.shutdownHystrixRequestContext();
         }
     }
 }
