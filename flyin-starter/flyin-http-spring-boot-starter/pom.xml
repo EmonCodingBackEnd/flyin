@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>flyin-starter</artifactId>
+        <groupId>com.coding.flyin</groupId>
+        <version>0.0.1</version>
+    </parent>
+
+    <artifactId>flyin-http-spring-boot-starter</artifactId>
+
+    <name>flyin-http-spring-boot-starter</name>
+
+    <dependencies>
+        <!-- 引入三方包 beg -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--http客户端-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+        </dependency>
+        <!-- 引入三方包 end -->
+
+        <!-- 引入二方包 beg -->
+        <!-- 引入二方包 end -->
+
+        <!-- 引入一方包 beg -->
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-cmp-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-util</artifactId>
+        </dependency>
+        <!-- 引入一方包 end -->
+    </dependencies>
+
+
+</project>

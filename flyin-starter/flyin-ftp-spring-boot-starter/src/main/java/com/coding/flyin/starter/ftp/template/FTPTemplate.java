@@ -36,14 +36,14 @@ import java.util.regex.Pattern;
 @Slf4j
 public class FTPTemplate implements FTPOperations {
 
+    private final GenericFTPClientPool ftpClientPool;
+
+    private final ServerConfig serverConfig;
+
     public FTPTemplate(GenericFTPClientPool ftpClientPool) {
         this.ftpClientPool = ftpClientPool;
         this.serverConfig = ((PooledFTPClientFactory) ftpClientPool.getFactory()).getServerConfig();
     }
-
-    private final GenericFTPClientPool ftpClientPool;
-
-    private final ServerConfig serverConfig;
 
     private GenericFTPClientPool getFtpClientPool() {
         return ftpClientPool;

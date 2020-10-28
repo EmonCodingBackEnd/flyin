@@ -27,11 +27,11 @@ import java.util.List;
 @Slf4j
 public class FTPTools {
 
+    private final FTPTemplate ftpTemplate;
+
     public FTPTools(FTPTemplate ftpTemplate) {
         this.ftpTemplate = ftpTemplate;
     }
-
-    private final FTPTemplate ftpTemplate;
 
     public UploadResult uploadFileAutoDetectDirectory(String filename, String fileContent) {
         UploadParam uploadParam =
@@ -39,8 +39,7 @@ public class FTPTools {
         return ftpTemplate.uploadFile(uploadParam);
     }
 
-    public UploadResult uploadFileAutoDetectDirectory(
-            List<MultipartFile> multipartFileList) {
+    public UploadResult uploadFileAutoDetectDirectory(List<MultipartFile> multipartFileList) {
         UploadParam uploadParam =
                 UploadParamBuilder.custom()
                         .autoDetect(true)
@@ -60,8 +59,7 @@ public class FTPTools {
         return ftpTemplate.uploadFile(uploadParam);
     }
 
-    public UploadResult uploadFile(
-            String remoteDirectory, String filename, String fileContent) {
+    public UploadResult uploadFile(String remoteDirectory, String filename, String fileContent) {
         UploadParam uploadParam =
                 UploadParamBuilder.custom()
                         .remoteDirectory(remoteDirectory)
