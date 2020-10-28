@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.coding.flyin</groupId>
-        <artifactId>flyin</artifactId>
+        <artifactId>flyin-parent</artifactId>
         <version>0.0.1</version>
     </parent>
 
@@ -26,6 +26,10 @@
         <!-- 引入二方包 end -->
 
         <!-- 引入一方包 beg -->
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-cmp-common</artifactId>
+        </dependency>
         <!-- 引入一方包 end -->
     </dependencies>
 

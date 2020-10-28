@@ -37,6 +37,10 @@
         <!-- 引入一方包 beg -->
         <dependency>
             <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-cmp-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
             <artifactId>flyin-util</artifactId>
         </dependency>
         <!-- 引入一方包 end -->

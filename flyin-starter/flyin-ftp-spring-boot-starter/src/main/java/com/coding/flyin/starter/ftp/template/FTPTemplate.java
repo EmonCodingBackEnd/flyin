@@ -1,5 +1,7 @@
 package com.coding.flyin.starter.ftp.template;
 
+import com.coding.flyin.cmp.common.regex.RegexSupport;
+import com.coding.flyin.cmp.common.regex.result.FilenameResult;
 import com.coding.flyin.starter.ftp.exception.FTPException;
 import com.coding.flyin.starter.ftp.param.*;
 import com.coding.flyin.starter.ftp.pool.GenericFTPClientPool;
@@ -19,7 +21,6 @@ import java.io.*;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -34,21 +35,6 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class FTPTemplate implements FTPOperations {
-
-    // 严格的合法文件名校验
-    private static final String STRICT_FILENAME_REGEX =
-            "^(?:([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(\\w+))|(?:([^<>/\\\\\\|:\"\"\\*\\?]+))$";
-    private static final Pattern STRICT_FILENAME_REGEX_PATTERN =
-            Pattern.compile(STRICT_FILENAME_REGEX);
-    private static final String IMAGE_REGEX =
-            "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG)$";
-    private static final Pattern IMAGE_REGEX_PATTERN = Pattern.compile(IMAGE_REGEX);
-    private static final String AUDIO_REGEX =
-            "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(mp3|MP3|wav|WAV|ape|APE|flac|m4a|aac)$";
-    private static final Pattern AUDIO_REGEX_PATTERN = Pattern.compile(AUDIO_REGEX);
-    private static final String VEDIO_REGEX =
-            "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(mp4|avi|rmvb|flv|wmv|vob|mkv|mov)$";
-    private static final Pattern VEDIO_REGEX_PATTERN = Pattern.compile(VEDIO_REGEX);
 
     public FTPTemplate(GenericFTPClientPool ftpClientPool) {
         this.ftpClientPool = ftpClientPool;
@@ -123,16 +109,15 @@ public class FTPTemplate implements FTPOperations {
     }
 
     private String getVirtualFilename(String originalFilename) {
-        Matcher matcher = STRICT_FILENAME_REGEX_PATTERN.matcher(originalFilename);
-        if (!matcher.matches()) {
+        FilenameResult regexResult = RegexSupport.matchStrictFilename(originalFilename);
+        if (!regexResult.isMatched()) {
             log.error("【FTP】源文件名 {} 不合法", originalFilename);
             throw new FTPException("【FTP】源文件名不合法");
         }
         StringBuilder buffer = new StringBuilder();
         buffer.append(UUID.randomUUID().toString().replace("-", ""));
-        // 如果有后缀
-        if (matcher.group(3) == null) {
-            buffer.append(".").append(matcher.group(2));
+        if (regexResult.isHasSuffix()) {
+            buffer.append(".").append(regexResult.getSuffix());
         }
         return buffer.toString();
     }
@@ -203,11 +188,11 @@ public class FTPTemplate implements FTPOperations {
     private String getRemoteDirectory(String originalFilename, UploadParam uploadParam) {
         String remoteDirectory;
         if (uploadParam.isAutoDetect()) {
-            if (IMAGE_REGEX_PATTERN.matcher(originalFilename).matches()) {
+            if (RegexSupport.matchImage(originalFilename).isMatched()) {
                 remoteDirectory = IMAGE_DIRECTORY;
-            } else if (AUDIO_REGEX_PATTERN.matcher(originalFilename).matches()) {
+            } else if (RegexSupport.matchAudio(originalFilename).isMatched()) {
                 remoteDirectory = AUDIO_DIRECTORY;
-            } else if (VEDIO_REGEX_PATTERN.matcher(originalFilename).matches()) {
+            } else if (RegexSupport.matchVedio(originalFilename).isMatched()) {
                 remoteDirectory = VEDIO_DIRECTORY;
             } else {
                 remoteDirectory = null;
