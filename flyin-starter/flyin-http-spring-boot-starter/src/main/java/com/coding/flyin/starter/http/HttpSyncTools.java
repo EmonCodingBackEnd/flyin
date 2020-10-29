@@ -184,22 +184,6 @@ public class HttpSyncTools {
                 StandardCharsets.UTF_8);
     }
 
-    //    public  String doPostXmlWechat(String url, String paramString) throws IOException {
-    //        return doPostXmlWechat(url, paramString, Integer.MIN_VALUE);
-    //    }
-    //
-    //    public  String doPostXmlWechat(String url, String paramString, int timeout)
-    //            throws IOException {
-    //        return doPost(
-    //                ClientSupport.httpSyncWechatClient,
-    //                url,
-    //                paramString,
-    //                null,
-    //                timeout,
-    //                HeaderSupport.KEEP_ALIVE_XML_UTF8_HEADERS,
-    //                StandardCharsets.UTF_8);
-    //    }
-
     public String doPostXml(String url, String paramString) throws IOException {
         return doPostXml(url, paramString, Integer.MIN_VALUE);
     }
