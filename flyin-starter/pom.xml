@@ -20,6 +20,7 @@
         <module>flyin-gray-deploy-spring-boot-starter</module>
         <module>flyin-ftp-spring-boot-starter</module>
         <module>flyin-http-spring-boot-starter</module>
+        <module>flyin-timer-spring-boot-starter</module>
     </modules>
 
 </project>
