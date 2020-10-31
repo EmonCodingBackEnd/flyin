@@ -6,6 +6,8 @@ import lombok.Data;
 // @ConfigurationProperties(prefix = "flyin.ftp") 方式一：第一步
 public class PooledFTPProperties {
 
+    private boolean enabled = false;
+
     /** ftp连接池配置：默认 存在默认配置. */
     private PoolConfig pool = new PoolConfig();
 

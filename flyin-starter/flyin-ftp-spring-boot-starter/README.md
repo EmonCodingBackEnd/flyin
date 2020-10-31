@@ -21,6 +21,7 @@
 ```yaml
 flyin:
   ftp:
+    enabled: true
     server:
       access-url-prefixes: http://file.emon.vip/
       host: 192.168.1.116
@@ -48,6 +49,7 @@ private FTPTools ftpTools; // 可以查阅FTPTools代码了解调用方式
 ```yaml
 flyin:
   ftp:
+    enabled: true
     one:
       server:
         access-url-prefixes: http://file.emon.vip/
