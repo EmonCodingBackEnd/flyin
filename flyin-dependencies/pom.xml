@@ -28,6 +28,22 @@
                 <artifactId>dozer</artifactId>
                 <version>5.5.1</version>
             </dependency>
+
+            <!-- 窃取jdbc实际执行sql并打印 beg -->
+            <!--更新正热，推荐使用-->
+            <dependency>
+                <groupId>p6spy</groupId>
+                <artifactId>p6spy</artifactId>
+                <version>3.9.1</version>
+            </dependency>
+            <!--log4jdbc 是在 jdbc 层的一个日志框架，可以将占位符与参数全部合并在一起显示；已经好久没更新了，但也很好用-->
+            <dependency>
+                <groupId>com.googlecode.log4jdbc</groupId>
+                <artifactId>log4jdbc</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <!-- 窃取jdbc实际执行sql并打印 end -->
+
             <!--redisson的依赖包，异常：java.lang.NoClassDefFoundError: com/esotericsoftware/kryo/io/Output-->
             <dependency>
                 <groupId>com.esotericsoftware.kryo</groupId>
@@ -38,13 +54,6 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>3.13.6</version>
-            </dependency>
-            <!--log4jdbc 是在 jdbc 层的一个日志框架，可以将占位符与参数全部合并在一起显示-->
-            <dependency>
-                <groupId>com.googlecode.log4jdbc</groupId>
-                <artifactId>log4jdbc</artifactId>
-                <version>1.2</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -166,12 +175,57 @@
                 </exclusions>
             </dependency>
 
+            <!--MyBatis，不直接使用，通过MyBatis-Plus引入-->
+            <!--<dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>2.1.3</version>
+            </dependency>-->
+            <!--MyBatis-Plus：MyBatis的增强库-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>3.4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
+                <version>3.4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-core</artifactId>
+                <version>3.4.0</version>
+            </dependency>
+            <!-- MyBatis-Plus代码生成器 beg -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>3.4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>2.3.30</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ibeetl</groupId>
+                <artifactId>beetl</artifactId>
+                <version>3.2.4.RELEASE</version>
+            </dependency>
+            <!-- MyBatis-Plus代码生成器 end -->
             <!-- 数据库驱动 -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.49</version>
             </dependency>
+            <!--数据库连接池-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>

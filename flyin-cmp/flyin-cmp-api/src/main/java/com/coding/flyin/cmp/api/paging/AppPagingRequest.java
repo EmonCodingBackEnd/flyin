@@ -6,15 +6,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AppPagingRequest<T extends AppPagingResponse> extends AppRequest<T> {
+public class AppPagingRequest extends AppRequest {
 
     private static final long serialVersionUID = -4266019549697726941L;
 
-    protected int pageIndex;
+    /** 分页页码：从0开始. */
+    protected int pageIndex = 0;
 
+    /** 分页尺寸：必须大于0. */
     protected int pageSize = 20;
-
-    protected int start = 0;
-
-    protected Integer limit = 20;
 }

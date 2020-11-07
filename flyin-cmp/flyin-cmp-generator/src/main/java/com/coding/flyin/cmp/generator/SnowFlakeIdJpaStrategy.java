@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class SnowFlakeIdStrategy implements IdentifierGenerator {
+public class SnowFlakeIdJpaStrategy implements IdentifierGenerator {
 
     @Override
     public Serializable generate(

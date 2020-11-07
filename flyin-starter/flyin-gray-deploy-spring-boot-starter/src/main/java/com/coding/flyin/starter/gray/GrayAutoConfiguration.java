@@ -24,13 +24,14 @@ import javax.annotation.PostConstruct;
 @ConditionalOnMissingBean(annotation = DisableMvcGrayFilter.class)
 @Import({FeignConfiguration.class})
 @Slf4j
-public class GrayAutoConfiguration {;
+public class GrayAutoConfiguration {
+    ;
     @Autowired private RequestRuleProperties ruleProperties;
 
     @PostConstruct
     public void init() {
         log.info(
-                "【灰度发布过滤器】MvcGrayFilter has been initialized, you can use annotation @DisableMvcGrayFilter disable");
+                "【灰度发布处理】MvcGrayFilter has been initialized, you can use annotation @DisableMvcGrayFilter disable");
     }
 
     /** 微服务之间通过Feign调用时拦截并加入x-rule规则. */

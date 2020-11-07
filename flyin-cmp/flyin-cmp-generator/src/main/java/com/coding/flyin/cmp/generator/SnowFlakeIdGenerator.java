@@ -74,6 +74,7 @@ public class SnowFlakeIdGenerator {
 
     private static SnowFlakeIdGenerator instance = null;
 
+    // 默认初始化的实例，给JPA使用
     static {
         String propDatacenterId = System.getProperty("snowflake.datacenterId");
         String propWorkerId = System.getProperty("snowflake.workerId");
@@ -126,12 +127,14 @@ public class SnowFlakeIdGenerator {
                 | sequence;
     }
 
-    private SnowFlakeIdGenerator() {
+    // 手工初始化的给MyBatisPlus
+    SnowFlakeIdGenerator() {
         this.datacenterId = getDatacenterId(maxDatacenterId);
         this.workerId = getWorkerId(this.datacenterId, maxWorkerId);
     }
 
-    private SnowFlakeIdGenerator(long datacenterId, long workerId) {
+    // 手工初始化的给MyBatisPlus
+    SnowFlakeIdGenerator(long datacenterId, long workerId) {
         if (datacenterId > maxDatacenterId || datacenterId < 0) {
             throw new RuntimeException(
                     String.format(

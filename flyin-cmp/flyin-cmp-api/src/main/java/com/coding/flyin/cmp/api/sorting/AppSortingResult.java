@@ -1,19 +1,31 @@
 package com.coding.flyin.cmp.api.sorting;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public interface AppSortingResult {
+@Getter
+@Setter
+public abstract class AppSortingResult {
 
-    Map<String, String> sortMappings = new HashMap<>();
+    private Map<String, String> sortMappings = new HashMap<>();
 
-    default void addSortMapping(String key, String value) {
+    public void addSortMapping(String key, String value) {
         if (null != value) {
+            if (null == sortMappings) {
+                sortMappings = new HashMap<>();
+            }
             sortMappings.put(key, value);
         }
     }
 
-    default String getSortMapping(String key) {
-        return sortMappings.get(key);
+    public String getSortMapping(String key) {
+        if (null != sortMappings) {
+            return sortMappings.get(key);
+        } else {
+            return null;
+        }
     }
 }

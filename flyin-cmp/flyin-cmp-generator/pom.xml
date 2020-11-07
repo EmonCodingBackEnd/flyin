@@ -29,6 +29,11 @@
             <artifactId>hibernate-core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- 引入三方包 end -->
 
         <!-- 引入二方包 beg -->

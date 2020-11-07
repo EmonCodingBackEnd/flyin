@@ -4,13 +4,15 @@ import com.coding.flyin.cmp.api.AppResponse;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-public class AppPagingResponse<T> extends AppResponse<PageProp> {
+public class AppPagingResponse<T> extends AppResponse<T> {
 
     private static final long serialVersionUID = -432944935501824776L;
 
-    protected List<T> results;
+    protected PagingProp paging;
+
+    public static <T> AppPagingResponse<T> getDefaultResponse() {
+        return new AppPagingResponse<>();
+    }
 }
