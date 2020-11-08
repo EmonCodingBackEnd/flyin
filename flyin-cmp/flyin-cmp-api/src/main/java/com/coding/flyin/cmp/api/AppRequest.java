@@ -4,9 +4,11 @@ import com.coding.flyin.cmp.api.sorting.AppSortingCondition;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class AppRequest extends AppSortingCondition {
+public class AppRequest extends AppSortingCondition implements Serializable {
 
     private static final long serialVersionUID = -311322238195233470L;
 

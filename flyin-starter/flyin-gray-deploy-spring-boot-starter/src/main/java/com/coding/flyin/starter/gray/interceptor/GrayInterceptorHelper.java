@@ -13,7 +13,6 @@ public abstract class GrayInterceptorHelper {
             new HystrixRequestVariableDefault<>();
 
     public static void initHystrixRequestContext(String labels) {
-        log.info("rule: {}", labels);
         if (!HystrixRequestContext.isCurrentThreadInitialized()) {
             HystrixRequestContext.initializeContext();
         }

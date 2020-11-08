@@ -19,6 +19,7 @@
     <modules>
         <module>flyin-cmp-generator</module>
         <module>flyin-cmp-api</module>
+        <module>flyin-cmp-api-helper</module>
         <module>flyin-cmp-idempotent</module>
         <module>flyin-cmp-common</module>
     </modules>

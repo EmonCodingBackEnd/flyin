@@ -264,6 +264,11 @@
             </dependency>
             <dependency>
                 <groupId>com.coding.flyin</groupId>
+                <artifactId>flyin-cmp-api-helper</artifactId>
+                <version>${parentRevision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coding.flyin</groupId>
                 <artifactId>flyin-cmp-idempotent</artifactId>
                 <version>${parentRevision}</version>
             </dependency>

@@ -10,27 +10,19 @@
         <version>0.0.1</version>
     </parent>
 
-    <artifactId>flyin-cmp-api</artifactId>
+    <artifactId>flyin-cmp-api-helper</artifactId>
 
-    <name>flyin-cmp-api</name>
+    <name>flyin-cmp-api-helper</name>
 
     <dependencies>
         <!-- 引入三方包 beg -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-json</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
-        <!--JPA分页依赖-->
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <!--MyBatisPlus分页依赖-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
-            <optional>true</optional>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
         </dependency>
         <!-- 引入三方包 end -->
 
@@ -40,9 +32,8 @@
         <!-- 引入一方包 beg -->
         <dependency>
             <groupId>com.coding.flyin</groupId>
-            <artifactId>flyin-core</artifactId>
+            <artifactId>flyin-cmp-api</artifactId>
         </dependency>
         <!-- 引入一方包 end -->
     </dependencies>
-
 </project>

@@ -58,9 +58,9 @@ public abstract class PagingProp implements Serializable {
         return (long) pageIndex * (long) pageSize;
     }
 
-    /** 分页开始数据行. */
+    /** 分页开始数据行：从1开始. */
     public long getStart() {
-        return getOffset();
+        return getOffset() + 1;
     }
 
     /** 分页截止数据行. */
