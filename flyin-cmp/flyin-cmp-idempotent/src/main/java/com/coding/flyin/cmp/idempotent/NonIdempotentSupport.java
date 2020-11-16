@@ -5,7 +5,6 @@ import com.coding.flyin.cmp.exception.AppStatus;
 import com.coding.flyin.cmp.idempotent.annotation.resolver.config.NonIdempotentConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.redisson.api.RSet;
 import org.redisson.api.RSetCache;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
@@ -34,7 +33,7 @@ public class NonIdempotentSupport {
 
     private static NonIdempotentConfig nonIdempotentConfig;
 
-    private static Codec codec = new KryoCodec();
+    private static final Codec codec = new KryoCodec();
 
     /** 根据标志获取requestId，如果已经存在了一份identity的数据则抛异常. */
     public static String generateRequestId(String identity) {

@@ -46,4 +46,9 @@ public class AppResponse<T> extends AppSortingResult implements Serializable {
     public static <T> AppResponse<T> getDefaultResponse() {
         return new AppResponse<>();
     }
+
+    /** 当前应答结果是否成功状态 */
+    public boolean isSuccess() {
+        return AppStatus.SUCCESS.getErrorCode().equals(this.errorCode);
+    }
 }
