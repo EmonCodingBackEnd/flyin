@@ -76,6 +76,12 @@
                 <artifactId>fastjson</artifactId>
                 <version>1.2.74</version>
             </dependency>
+            <!--基于 apache poi 的便捷高效excel工具-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>2.2.6</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -276,6 +282,11 @@
             <dependency>
                 <groupId>com.coding.flyin</groupId>
                 <artifactId>flyin-cmp-api-helper</artifactId>
+                <version>${parentRevision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coding.flyin</groupId>
+                <artifactId>flyin-cmp-auth</artifactId>
                 <version>${parentRevision}</version>
             </dependency>
             <dependency>

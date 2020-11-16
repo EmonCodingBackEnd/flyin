@@ -36,7 +36,7 @@ public interface AppBaseRedisKey {
     /** Redis的Key前缀. */
     String getPrefix();
 
-    default String getDelimiter() {
+    static String getDelimiter() {
         return ":";
     }
 

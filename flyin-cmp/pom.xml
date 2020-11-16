@@ -22,6 +22,7 @@
         <module>flyin-cmp-api-helper</module>
         <module>flyin-cmp-idempotent</module>
         <module>flyin-cmp-common</module>
+        <module>flyin-cmp-auth</module>
     </modules>
 
 </project>
