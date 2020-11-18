@@ -6,7 +6,7 @@
 
     <groupId>com.coding.flyin</groupId>
     <artifactId>flyin</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
 
     <name>flyin</name>
@@ -274,6 +274,22 @@
                     <id>nexus-snapshots</id>
                     <name>nexus snapshots Repository</name>
                     <url>http://localhost:8081/nexus/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <!-- 向ss私服中发布jar时配置 mvn clean deploy -Dmaven.test.skip=true -Pss -->
+            <id>ss</id>
+            <distributionManagement>
+                <repository>
+                    <id>releases</id><!-- ID必须和setting.xml文件中一致 -->
+                    <name>Nexus Release Repository</name>
+                    <url>https://repo.ishanshan.com/repository/releases/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>snapshots</id><!-- ID必须和setting.xml文件中一致 -->
+                    <name>Nexus Snapshot Repository</name>
+                    <url>https://repo.ishanshan.com/repository/snapshots/</url>
                 </snapshotRepository>
             </distributionManagement>
         </profile>
