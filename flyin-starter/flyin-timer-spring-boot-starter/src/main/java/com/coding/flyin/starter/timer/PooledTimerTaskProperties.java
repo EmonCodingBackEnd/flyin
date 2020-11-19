@@ -2,7 +2,6 @@ package com.coding.flyin.starter.timer;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.annotation.PostConstruct;
@@ -79,7 +78,7 @@ public class PooledTimerTaskProperties {
         private int poolSize = 10;
 
         /** 等待任务在关机时完成--表明等待所有线程执行完，等待时间（默认为0，此时立即停止）. */
-        private int awaitTerminationSeconds;
+        private int awaitTerminationSeconds = 60;
     }
 
     @Data

@@ -12,7 +12,7 @@
 <dependency>
     <groupId>com.coding.flyin</groupId>
     <artifactId>flyin-timer-spring-boot-starter</artifactId>
-    <version>0.1.0</version> <!-- 需要替换为最新版本 -->
+    <version>0.1.1</version> <!-- 需要替换为最新版本 -->
 </dependency>
 ```
 
