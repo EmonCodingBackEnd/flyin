@@ -1,7 +1,8 @@
-package com.coding.flyin.cmp.common.validation.constraints;
+package com.coding.flyin.cmp.api.validation.constraints;
 
-import com.coding.flyin.cmp.common.validation.BaseEnum;
-import com.coding.flyin.cmp.common.validation.validator.EnumValueValidator;
+
+import com.coding.flyin.cmp.api.validation.BaseEnum;
+import com.coding.flyin.cmp.api.validation.validator.EnumValueValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

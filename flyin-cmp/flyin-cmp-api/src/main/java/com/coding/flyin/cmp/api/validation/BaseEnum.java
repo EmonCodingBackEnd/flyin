@@ -1,4 +1,4 @@
-package com.coding.flyin.cmp.common.validation;
+package com.coding.flyin.cmp.api.validation;
 
 import com.coding.flyin.cmp.exception.AppException;
 import com.coding.flyin.cmp.exception.AppStatus;
