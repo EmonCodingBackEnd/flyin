@@ -61,7 +61,7 @@
     </issueManagement>
 
     <properties>
-        <parentRevision>0.1.2</parentRevision>
+        <parentRevision>0.1.5</parentRevision>
         <dynamic.host>repo.emon.vip</dynamic.host>
         <dynamic.url>http://${dynamic.host}</dynamic.url>
         <dynamic.sslurl>https://${dynamic.host}</dynamic.sslurl>
