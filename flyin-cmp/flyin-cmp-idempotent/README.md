@@ -10,7 +10,7 @@
 <dependency>
     <groupId>com.coding.flyin</groupId>
     <artifactId>flyin-cmp-idempotent</artifactId>
-    <version>0.1.3</version> <!-- 需要替换为最新版本 -->
+    <version>0.1.5</version> <!-- 需要替换为最新版本 -->
 </dependency>
 ```
 

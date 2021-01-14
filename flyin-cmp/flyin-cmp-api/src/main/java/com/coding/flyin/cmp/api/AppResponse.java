@@ -2,6 +2,7 @@ package com.coding.flyin.cmp.api;
 
 import com.coding.flyin.cmp.api.sorting.AppSortingResult;
 import com.coding.flyin.cmp.exception.AppStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +49,7 @@ public class AppResponse<T> extends AppSortingResult implements Serializable {
     }
 
     /** 当前应答结果是否成功状态 */
+    @JsonIgnore
     public boolean isSuccess() {
         return AppStatus.SUCCESS.getErrorCode().equals(this.errorCode);
     }
