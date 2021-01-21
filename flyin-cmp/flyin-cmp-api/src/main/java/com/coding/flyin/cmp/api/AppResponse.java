@@ -37,7 +37,7 @@ public class AppResponse<T> extends AppSortingResult implements Serializable {
 
     private static final long serialVersionUID = -4627150270589944255L;
 
-    protected String errorCode = AppStatus.SUCCESS.getErrorCode();
+    protected Integer errorCode = AppStatus.SUCCESS.getErrorCode();
 
     protected String errorMessage = "成功";
 
