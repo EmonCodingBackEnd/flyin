@@ -9,7 +9,7 @@ public class AppException extends RuntimeException {
 
     private static final long serialVersionUID = 8623276252895911775L;
 
-    protected String errorCode;
+    protected Integer errorCode;
 
     protected String errorMessage;
 
