@@ -42,9 +42,9 @@
         <!-- 引入一方包 end -->
     </dependencies>
 
-    <build>
+    <!--<build>
         <plugins>
-            <!--全面采用Nepxion Discovery框架，废弃该灰度发布插件-->
+            &lt;!&ndash;全面采用Nepxion Discovery框架，废弃该灰度发布插件&ndash;&gt;
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -53,5 +53,5 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 </project>
