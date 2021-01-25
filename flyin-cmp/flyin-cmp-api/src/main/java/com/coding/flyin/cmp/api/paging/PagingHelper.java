@@ -1,6 +1,7 @@
 package com.coding.flyin.cmp.api.paging;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import lombok.NonNull;
 
 public abstract class PagingHelper {
 
@@ -32,7 +33,7 @@ public abstract class PagingHelper {
      */
     public static PagingProp fromMyBatisPlusPage(
             com.baomidou.mybatisplus.core.metadata.IPage<?> page) {
-        PagingProp pagingProp = new PagingProp() {};
+        NormalPagingProp pagingProp = new NormalPagingProp();
         pagingProp.setPageIndex((int) page.getCurrent() - 1);
         pagingProp.setPageSize((int) page.getSize());
         pagingProp.setResultCount(page.getRecords().size());
@@ -50,11 +51,26 @@ public abstract class PagingHelper {
      * @return - PagingProp
      */
     public static PagingProp fromJpaPage(org.springframework.data.domain.Page<?> page) {
-        PagingProp pagingProp = new PagingProp() {};
+        NormalPagingProp pagingProp = new NormalPagingProp();
         pagingProp.setPageIndex(page.getNumber());
         pagingProp.setPageSize(page.getSize());
         pagingProp.setResultCount(page.getNumberOfElements());
         pagingProp.setTotalResultCount(page.getTotalElements());
         return pagingProp;
+    }
+
+    /**
+     * 转换<br>
+     * com.baomidou.mybatisplus.core.metadata.IPage<br>
+     * --><br>
+     * PagingProp
+     *
+     * @param cursor 游标分页时的游标（比如MongoDB和ElasticSearch）
+     * @return - PagingProp
+     */
+    public static PagingProp fromCursorPage(@NonNull String cursor) {
+        CursorPagingProp cursorPagingProp = new CursorPagingProp();
+        cursorPagingProp.setCursor(cursor);
+        return cursorPagingProp;
     }
 }
