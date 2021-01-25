@@ -1,5 +1,7 @@
 package com.coding.flyin.cmp.api.paging;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class NormalPagingProp extends PagingProp {
 
     private static final long serialVersionUID = 1170964941403697653L;
@@ -17,6 +19,12 @@ public class NormalPagingProp extends PagingProp {
     private long resultCount;
 
     // ==================================================华丽的分割线==================================================
+
+    /** 是否游标分页：对应的是关系数据库分页. */
+    @JsonProperty("isCursorPaging")
+    public boolean isCursorPaging() {
+        return false;
+    }
 
     public int getPageIndex() {
         return pageIndex;
