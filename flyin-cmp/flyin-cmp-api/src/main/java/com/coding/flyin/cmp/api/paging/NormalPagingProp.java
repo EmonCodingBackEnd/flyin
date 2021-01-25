@@ -6,45 +6,17 @@ public class NormalPagingProp extends PagingProp {
 
     private static final long serialVersionUID = 1170964941403697653L;
 
-    /** 页页码：从0开始. */
-    private int pageIndex;
-
-    /** 分页尺寸：必须大于0. */
-    private int pageSize;
-
-    /** 总数据量. */
-    private long totalResultCount;
-
-    /** 当前页实际数据数量：如果不是最后一页，应该和 pageSize 一样大，如果是最后一页，可能比 pageSize 小. */
-    private long resultCount;
+    public NormalPagingProp() {
+        isCursorPaging = false;
+    }
 
     // ==================================================华丽的分割线==================================================
 
     /** 是否游标分页：对应的是关系数据库分页. */
+    @Override
     @JsonProperty("isCursorPaging")
     public boolean isCursorPaging() {
-        return false;
-    }
-
-    public int getPageIndex() {
-        return pageIndex;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public long getTotalResultCount() {
-        return totalResultCount;
-    }
-
-    /** 总页数. */
-    public long getPageCount() {
-        return pageSize <= 0 ? 1 : (int) Math.ceil((double) totalResultCount / (double) pageSize);
-    }
-
-    public long getResultCount() {
-        return resultCount;
+        return isCursorPaging;
     }
 
     private long getOffset() {
@@ -61,22 +33,6 @@ public class NormalPagingProp extends PagingProp {
         return getOffset() + getResultCount();
     }
 
-    public void setPageIndex(int pageNumber) {
-        this.pageIndex = pageNumber;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public void setTotalResultCount(long totalResultCount) {
-        this.totalResultCount = totalResultCount;
-    }
-
-    public void setResultCount(long resultCount) {
-        this.resultCount = resultCount;
-    }
-
     // ==================================================华丽的分割线==================================================
 
     /** 是否有上一页. */
@@ -85,7 +41,8 @@ public class NormalPagingProp extends PagingProp {
     }
 
     /** 是否首页. */
-    public boolean isFirst() {
+    @Override
+    public Boolean isFirst() {
         return !hasPrevious();
     }
 
@@ -93,8 +50,14 @@ public class NormalPagingProp extends PagingProp {
     public boolean hasNext() {
         return getPageIndex() + 1 < getPageCount();
     }
+
     /** 是否最后一页. */
-    public boolean isLast() {
-        return !hasNext();
+    @Override
+    public Boolean isLast() {
+        if (isCursorPaging) {
+            return getCursor() == null;
+        } else {
+            return !hasNext();
+        }
     }
 }

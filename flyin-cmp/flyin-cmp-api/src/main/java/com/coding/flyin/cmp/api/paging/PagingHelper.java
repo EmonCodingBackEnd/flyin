@@ -31,7 +31,7 @@ public abstract class PagingHelper {
      * @param page MyBatisPlus分页结果对象
      * @return - PagingProp
      */
-    public static PagingProp fromMyBatisPlusPage(
+    public static NormalPagingProp fromMyBatisPlusPage(
             com.baomidou.mybatisplus.core.metadata.IPage<?> page) {
         NormalPagingProp pagingProp = new NormalPagingProp();
         pagingProp.setPageIndex((int) page.getCurrent() - 1);
@@ -50,7 +50,7 @@ public abstract class PagingHelper {
      * @param page JPA分页结果对象
      * @return - PagingProp
      */
-    public static PagingProp fromJpaPage(org.springframework.data.domain.Page<?> page) {
+    public static NormalPagingProp fromJpaPage(org.springframework.data.domain.Page<?> page) {
         NormalPagingProp pagingProp = new NormalPagingProp();
         pagingProp.setPageIndex(page.getNumber());
         pagingProp.setPageSize(page.getSize());
@@ -65,12 +65,15 @@ public abstract class PagingHelper {
      * --><br>
      * PagingProp
      *
+     * @param isFirstQuery 游标查询是否首次查询
      * @param cursor 游标分页时的游标（比如MongoDB和ElasticSearch）
      * @return - PagingProp
      */
-    public static PagingProp fromCursorPage(@NonNull String cursor) {
+    public static CursorPagingProp fromCursorPage(
+            @NonNull boolean isFirstQuery, @NonNull String cursor) {
         CursorPagingProp cursorPagingProp = new CursorPagingProp();
         cursorPagingProp.setCursor(cursor);
+        cursorPagingProp.setFirst(isFirstQuery);
         return cursorPagingProp;
     }
 }
