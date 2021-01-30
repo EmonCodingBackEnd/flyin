@@ -69,8 +69,7 @@ public abstract class PagingHelper {
      * @param cursor 游标分页时的游标（比如MongoDB和ElasticSearch）
      * @return - PagingProp
      */
-    public static CursorPagingProp fromCursorPage(
-            @NonNull boolean isFirstQuery, @NonNull String cursor) {
+    public static CursorPagingProp fromCursorPage(@NonNull boolean isFirstQuery, String cursor) {
         CursorPagingProp cursorPagingProp = new CursorPagingProp();
         cursorPagingProp.setCursor(cursor);
         cursorPagingProp.setFirst(isFirstQuery);
