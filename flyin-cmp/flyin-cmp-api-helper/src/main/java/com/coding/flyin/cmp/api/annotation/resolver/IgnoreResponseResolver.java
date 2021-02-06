@@ -1,8 +1,8 @@
 package com.coding.flyin.cmp.api.annotation.resolver;
 
 import com.coding.flyin.cmp.api.AppResponse;
-import com.coding.flyin.cmp.api.paging.AppPagingResponse;
 import com.coding.flyin.cmp.api.annotation.IgnoreResponse;
+import com.coding.flyin.cmp.api.paging.AppPagingResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.MethodParameter;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.annotation.PostConstruct;
+import java.net.URI;
 
 /**
  * 统一响应.
@@ -101,6 +102,11 @@ public class IgnoreResponseResolver implements ResponseBodyAdvice<Object> {
             Class<? extends HttpMessageConverter<?>> selectedConverterType,
             ServerHttpRequest serverHttpRequest,
             ServerHttpResponse serverHttpResponse) {
+        // 针对SpringBoot监控接口忽略处理
+        URI uri = serverHttpRequest.getURI();
+        if (uri.getPath().startsWith("/actuator")) {
+            return oriObject;
+        }
         // 定义最终的返回对象
         AppResponse<Object> response;
         if (null == oriObject) {
