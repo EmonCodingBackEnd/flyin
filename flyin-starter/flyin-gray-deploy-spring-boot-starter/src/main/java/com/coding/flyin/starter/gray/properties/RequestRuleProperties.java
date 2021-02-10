@@ -1,7 +1,7 @@
 package com.coding.flyin.starter.gray.properties;
 
 import com.coding.flyin.starter.gray.constant.GrayConstants;
-import com.coding.flyin.starter.gray.request.rule.FilterRequestRule;
+import com.coding.flyin.starter.gray.rule.filter.RuleFilter;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,7 +18,7 @@ public class RequestRuleProperties {
     /** 传递模式. {@linkplain TransferModeEnum 参见} */
     private TransferModeEnum transferMode = TransferModeEnum.OVERRIDE_FIRST;
 
-    public String updateRule(FilterRequestRule rule) {
+    public String updateRule(RuleFilter rule) {
         if (rule == null) {
             return this.data;
         }

@@ -1,8 +1,7 @@
 package com.coding.flyin.starter.gray.interceptor;
 
 import com.coding.flyin.starter.gray.constant.GrayConstants;
-import com.coding.flyin.starter.gray.properties.RequestRuleProperties;
-import com.coding.flyin.starter.gray.request.rule.FilterRequestRule;
+import com.coding.flyin.starter.gray.rule.filter.RuleFilter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
@@ -17,14 +16,12 @@ import java.io.IOException;
 @Slf4j
 public class GrayHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
-    private RequestRuleProperties ruleProperties;
-
     @Override
     public ClientHttpResponse intercept(
             HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
         HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
-        FilterRequestRule rule = GrayInterceptorHelper.rule.get();
+        RuleFilter rule = GrayInterceptorHelper.rule.get();
         if (rule != null) {
             requestWrapper.getHeaders().add(GrayConstants.RULE_HEADER, rule.toRule());
         }

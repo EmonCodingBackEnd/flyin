@@ -1,10 +1,10 @@
-package com.coding.flyin.starter.gray.request.rule;
+package com.coding.flyin.starter.gray.rule.filter;
 
 import com.netflix.loadbalancer.Server;
 
 import java.util.Collection;
 
-public interface FilterRequestRule {
+public interface RuleFilter {
 
     Collection<Server> filter(Collection<Server> serverList);
 

@@ -1,7 +1,7 @@
-package com.coding.flyin.starter.gray;
+package com.coding.flyin.starter.gray.rule.ribbon;
 
 import com.coding.flyin.starter.gray.interceptor.GrayInterceptorHelper;
-import com.coding.flyin.starter.gray.request.rule.FilterRequestRule;
+import com.coding.flyin.starter.gray.rule.filter.RuleFilter;
 import com.netflix.loadbalancer.Server;
 import com.netflix.loadbalancer.ZoneAvoidanceRule;
 import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
@@ -15,7 +15,7 @@ public class FilterAndWeightMetadataRule extends ZoneAvoidanceRule {
 
     private static final String META_DATA_KEY_WEIGHT = "weight";
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     @Override
     public Server choose(Object key) {
@@ -24,7 +24,7 @@ public class FilterAndWeightMetadataRule extends ZoneAvoidanceRule {
         if (CollectionUtils.isEmpty(serverList)) {
             return null;
         }
-        FilterRequestRule rule = GrayInterceptorHelper.rule.get();
+        RuleFilter rule = GrayInterceptorHelper.rule.get();
         Server server;
         if (rule != null) {
             server = choose(rule.filter(serverList));
@@ -59,7 +59,7 @@ public class FilterAndWeightMetadataRule extends ZoneAvoidanceRule {
             int weight = 100;
             try {
                 weight = Integer.parseInt(strWeight);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
             }
             totalWeight += weight;
             weights.add(totalWeight);

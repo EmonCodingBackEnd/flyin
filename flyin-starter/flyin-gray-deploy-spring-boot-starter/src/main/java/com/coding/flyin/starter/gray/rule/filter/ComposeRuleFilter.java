@@ -1,4 +1,4 @@
-package com.coding.flyin.starter.gray.request.rule;
+package com.coding.flyin.starter.gray.rule.filter;
 
 import com.coding.flyin.starter.gray.constant.GrayConstants;
 import com.netflix.loadbalancer.Server;
@@ -9,9 +9,9 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 
 @Data
-public class ComposeRequestRule implements FilterRequestRule {
+public class ComposeRuleFilter implements RuleFilter {
 
-    private List<FilterRequestRule> rules;
+    private List<RuleFilter> rules;
 
     private String logic;
 
@@ -23,11 +23,11 @@ public class ComposeRequestRule implements FilterRequestRule {
         Set<Server> result = new HashSet<>();
         if (GrayConstants.RULE_AND_NAME.equals(logic)) {
             result.addAll(serverList);
-            for (FilterRequestRule rule : rules) {
+            for (RuleFilter rule : rules) {
                 result.retainAll(rule.filter(result));
             }
         } else if (GrayConstants.RULE_OR_NAME.equals(logic)) {
-            for (FilterRequestRule rule : rules) {
+            for (RuleFilter rule : rules) {
                 result.addAll(rule.filter(serverList));
             }
         }
@@ -48,14 +48,14 @@ public class ComposeRequestRule implements FilterRequestRule {
         return toRule();
     }
 
-    public void addRule(FilterRequestRule rule) {
+    public void addRule(RuleFilter rule) {
         if (rules == null) {
             rules = new ArrayList<>();
         }
         rules.add(rule);
     }
 
-    public void removeRule(FilterRequestRule rule) {
+    public void removeRule(RuleFilter rule) {
         if (rules == null) {
             rules = new ArrayList<>();
         }

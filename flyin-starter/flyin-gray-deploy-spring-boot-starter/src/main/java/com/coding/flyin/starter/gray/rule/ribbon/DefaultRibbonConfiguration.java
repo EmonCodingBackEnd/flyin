@@ -1,4 +1,4 @@
-package com.coding.flyin.starter.gray;
+package com.coding.flyin.starter.gray.rule.ribbon;
 
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.IRule;
@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
 public class DefaultRibbonConfiguration {
 
-    @Value("${ribbon.client.name:#{null}")
+    @Value("${ribbon.client.name}:#{null}")
     private String name;
 
     private IClientConfig config;

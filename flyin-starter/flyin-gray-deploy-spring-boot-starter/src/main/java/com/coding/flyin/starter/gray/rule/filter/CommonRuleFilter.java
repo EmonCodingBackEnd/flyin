@@ -1,4 +1,4 @@
-package com.coding.flyin.starter.gray.request.rule;
+package com.coding.flyin.starter.gray.rule.filter;
 
 import com.coding.flyin.starter.gray.constant.GrayConstants;
 import com.netflix.loadbalancer.Server;
@@ -12,15 +12,13 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 
 @Data
-public class CommonRequestRule implements FilterRequestRule {
+public class CommonRuleFilter implements RuleFilter {
 
     private Type type;
 
     private Set<String> tags;
 
-    public CommonRequestRule() {}
-
-    public CommonRequestRule(int type, String tags) {
+    public CommonRuleFilter(int type, String tags) {
         this.type = Type.index(type);
         if (!StringUtils.isEmpty(tags)) {
             this.tags =
@@ -146,8 +144,8 @@ public class CommonRequestRule implements FilterRequestRule {
             this.index = index;
         }
 
-        private String name;
-        private int index;
+        private final String name;
+        private final int index;
 
         public static Type index(int index) {
             for (Type type : Type.values()) {

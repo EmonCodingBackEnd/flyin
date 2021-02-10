@@ -1,10 +1,9 @@
-package com.coding.flyin.starter.gray.filter;
+package com.coding.flyin.starter.gray.interceptor;
 
 import com.coding.flyin.starter.gray.constant.GrayConstants;
-import com.coding.flyin.starter.gray.interceptor.GrayInterceptorHelper;
 import com.coding.flyin.starter.gray.properties.RequestRuleProperties;
-import com.coding.flyin.starter.gray.request.rule.FilterRequestRule;
-import com.coding.flyin.starter.gray.request.rule.RequestRuleFactory;
+import com.coding.flyin.starter.gray.rule.filter.RuleFilter;
+import com.coding.flyin.starter.gray.rule.filter.RuleFilterFactory;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,9 +26,9 @@ public class MvcGrayFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // 用当前应用的配置更新传递规则
         String reqLabels = request.getHeader(GrayConstants.RULE_HEADER);
-        FilterRequestRule rule = RequestRuleFactory.create(reqLabels);
+        RuleFilter rule = RuleFilterFactory.create(reqLabels);
         String localLabels = ruleProperties.updateRule(rule);
-        log.info("req rule: {} and local rule: {}", reqLabels, localLabels);
+        log.info("req rule: {} and final rule: {}", reqLabels, localLabels);
         GrayInterceptorHelper.initHystrixRequestContext(localLabels);
         try {
             filterChain.doFilter(request, response);

@@ -20,7 +20,7 @@ public enum TransferModeEnum {
         this.description = description;
     }
 
-    private String transferMode;
+    private final String transferMode;
 
-    private String description;
+    private final String description;
 }
