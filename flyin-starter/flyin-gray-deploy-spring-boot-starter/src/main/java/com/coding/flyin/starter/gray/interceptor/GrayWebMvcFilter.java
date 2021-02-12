@@ -27,9 +27,9 @@ public class GrayWebMvcFilter extends OncePerRequestFilter {
         // 用当前应用的配置更新传递规则
         String reqLabels = request.getHeader(GrayConstants.RULE_HEADER);
         RuleFilter rule = RuleFilterFactory.create(reqLabels);
-        String localLabels = ruleProperties.updateRule(rule);
-        log.info("req rule: {} and final rule: {}", reqLabels, localLabels);
-        GrayInterceptorHelper.initHystrixRequestContext(localLabels);
+        String effectiveLabels = ruleProperties.updateRule(rule);
+        log.info("req rule: {} and effective rule: {}", reqLabels, effectiveLabels);
+        GrayInterceptorHelper.initHystrixRequestContext(effectiveLabels);
         try {
             filterChain.doFilter(request, response);
         } finally {
