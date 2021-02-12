@@ -1,8 +1,8 @@
 package com.coding.flyin.starter.gray;
 
-import com.coding.flyin.starter.gray.annotation.DisableMvcGrayFilter;
-import com.coding.flyin.starter.gray.interceptor.MvcGrayFilter;
-import com.coding.flyin.starter.gray.interceptor.FeignHeaderRequestInterceptor;
+import com.coding.flyin.starter.gray.annotation.DisableGrayWebMvcFilter;
+import com.coding.flyin.starter.gray.interceptor.GrayWebMvcFilter;
+import com.coding.flyin.starter.gray.interceptor.GrayFeignRequestInterceptor;
 import com.coding.flyin.starter.gray.interceptor.GrayHttpRequestInterceptor;
 import com.coding.flyin.starter.gray.properties.RequestRuleProperties;
 import com.coding.flyin.starter.gray.rule.ribbon.DefaultRibbonConfiguration;
@@ -24,7 +24,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 @RibbonClients(defaultConfiguration = DefaultRibbonConfiguration.class)
 @EnableConfigurationProperties(RequestRuleProperties.class)
-@ConditionalOnMissingBean(annotation = DisableMvcGrayFilter.class)
+@ConditionalOnMissingBean(annotation = DisableGrayWebMvcFilter.class)
 @Slf4j
 public class GrayAutoConfiguration {
 
@@ -39,13 +39,13 @@ public class GrayAutoConfiguration {
     /** 为Web服务添加过滤器，解析出某一个请求在该服务中的有效label. */
     @Bean
     /*
-       @ConditionalOnBean(annotation = EnableMvcGrayFilter.class) 无法生效，参见 https://github.com/spring-projects/spring-boot/issues/15177
+       @ConditionalOnBean(annotation = EnableGrayWebMvcFilter.class) 无法生效，参见 https://github.com/spring-projects/spring-boot/issues/15177
        替换成 @ConditionalOnBean(value = RequestRuleProperties.class, annotation = EnableMvcGrayFilter.class) 才生效，
-       但这种方式看不惯，决定使用 @ConditionalOnMissingBean(annotation = EnableMvcGrayFilter.class) 替代，采用默认生效的方式
+       但这种方式看不惯，决定使用 @ConditionalOnMissingBean(annotation = DisableGrayWebMvcFilter.class) 替代，采用默认生效的方式
     */
-    public FilterRegistrationBean<MvcGrayFilter> mvcGrayFilterRegistration() {
-        FilterRegistrationBean<MvcGrayFilter> registrationBean = new FilterRegistrationBean<>();
-        MvcGrayFilter filter = new MvcGrayFilter();
+    public FilterRegistrationBean<GrayWebMvcFilter> mvcGrayFilterRegistration() {
+        FilterRegistrationBean<GrayWebMvcFilter> registrationBean = new FilterRegistrationBean<>();
+        GrayWebMvcFilter filter = new GrayWebMvcFilter();
         filter.setRuleProperties(ruleProperties);
         registrationBean.setFilter(filter);
         registrationBean.setName("mvcGrayFilter");
@@ -59,8 +59,8 @@ public class GrayAutoConfiguration {
     @ConditionalOnClass(name = {"feign.RequestInterceptor"})
     @RefreshScope
     @Bean
-    public FeignHeaderRequestInterceptor feignHeaderRequestInterceptor() {
-        return new FeignHeaderRequestInterceptor();
+    public GrayFeignRequestInterceptor grayFeignRequestInterceptor() {
+        return new GrayFeignRequestInterceptor();
     }
 
     /** 微服务通过 ClientHttpRequestInterceptor 传递参数 */

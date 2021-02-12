@@ -5,4 +5,6 @@ import java.lang.annotation.*;
 @Target(value = {ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)
 @Documented
-public @interface DisableMvcGrayFilter {}
+/** 具体原因，参见 GrayAutoConfiguration 的使用描述. */
+@Deprecated
+public @interface EnableGrayWebMvcFilter {}

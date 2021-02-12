@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Setter
 @Slf4j
-public class MvcGrayFilter extends OncePerRequestFilter {
+public class GrayWebMvcFilter extends OncePerRequestFilter {
 
     private RequestRuleProperties ruleProperties;
 
