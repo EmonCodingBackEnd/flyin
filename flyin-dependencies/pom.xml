@@ -400,5 +400,5 @@
         <!--
         Maven知识点：
         <optional>true</optional>和<scope>provided</scope>什么区别？
-        optional=true和scope=provided都可以阻断依赖的传播，optional=true在当前页可以执行编译运行，但scope=provided仅作用在编译期
+        optional=true和scope=provided都可以阻断依赖的传播，optional=true在当前项目中也可以执行编译和运行，但scope=provided仅作用在编译期
         -->
