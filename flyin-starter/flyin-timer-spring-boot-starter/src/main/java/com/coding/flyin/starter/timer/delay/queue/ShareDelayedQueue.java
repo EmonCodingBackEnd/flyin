@@ -39,6 +39,16 @@ public class ShareDelayedQueue {
         delayedQueue.offer(delayTask, timeout, timeUnit);
     }
 
+    public static Boolean remove(DelayTask delayTask) {
+        boolean success = delayedQueue.remove(delayTask);
+        if (success) {
+            log.info("【延时任务队列】任务已剔除出延迟队列,taskId={}", delayTask.getTaskId());
+        } else {
+            log.info("【延时任务队列】任务不存在于延迟队列,taskId={}", delayTask.getTaskId());
+        }
+        return success;
+    }
+
     @PostConstruct
     private void init() {
         log.info("【初始化分布式延时任务队列守护线程】开始......");
