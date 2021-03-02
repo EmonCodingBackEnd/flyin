@@ -24,6 +24,7 @@ flyin:
     enabled: false # 默认 false
     delay:
       enabled: true # 默认 false
+      standalone: false
       delay-task-queue-redis-key: flyin:delayQueue
       thread-name-prefix: TIMER_DELAY-
       core-pool-size: 8

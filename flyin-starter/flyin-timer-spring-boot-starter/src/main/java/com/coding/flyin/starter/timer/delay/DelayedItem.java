@@ -80,7 +80,11 @@ public class DelayedItem<T extends DelayTask> implements Delayed {
     @Override
     public boolean equals(Object object) {
         if (object instanceof DelayedItem) {
-            return object.hashCode() == hashCode();
+            // return object.hashCode() == hashCode();
+            String otherTaskId = ((DelayedItem) object).getTask().getTaskId();
+            String taskId = this.task.getTaskId();
+            return (otherTaskId == null && taskId == null)
+                    || (otherTaskId != null && otherTaskId.equals(taskId));
         }
         return false;
     }

@@ -43,6 +43,9 @@ public class PooledTimerTaskProperties {
 
         private boolean enabled = false;
 
+        /** 是否单机模式（默认：true）. */
+        private boolean standalone = true;
+
         /** 延迟队列在redis中存储的key. */
         private String delayTaskQueueRedisKey = "flyin:delayQueue";
 

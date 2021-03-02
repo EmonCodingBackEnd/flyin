@@ -52,12 +52,25 @@ public class SingleDelayedQueue {
      * @author Rushing0711
      * @since 1.0.0
      */
-    public static void put(DelayTask delayTask, long timeout) {
-        long nanoTime = TimeUnit.NANOSECONDS.convert(timeout, TimeUnit.MILLISECONDS);
+    public static void put(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
+        log.info("【延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
+        long nanoTime = TimeUnit.NANOSECONDS.convert(timeout, timeUnit);
         // 创建一个任务
-        DelayedItem delayedItem = new DelayedItem(delayTask, nanoTime);
+        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, nanoTime);
         // 阻塞式将任务放在延时的队列中
         delayedItems.put(delayedItem);
+    }
+
+    public static Boolean remove(DelayTask delayTask) {
+        // 创建一个任务
+        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, 0);
+        boolean success = delayedItems.remove(delayedItem);
+        if (success) {
+            log.info("【延时任务队列】任务已剔除出延迟队列,taskId={}", delayTask.getTaskId());
+        } else {
+            log.info("【延时任务队列】任务不存在于延迟队列,taskId={}", delayTask.getTaskId());
+        }
+        return success;
     }
 
     /** 初始化守护线程 */

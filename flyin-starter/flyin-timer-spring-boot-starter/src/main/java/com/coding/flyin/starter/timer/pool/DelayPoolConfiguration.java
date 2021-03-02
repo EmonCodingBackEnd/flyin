@@ -53,16 +53,17 @@ public class DelayPoolConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "flyin.timer.delay", name = "standalone", havingValue = "true", matchIfMissing = true)
+    public SingleDelayedQueue singleDelayedQueue(
+            @Qualifier("delayPoolQueueExecutor") ThreadPoolTaskExecutor delayPoolQueueExecutor) {
+        return new SingleDelayedQueue(pooledTimerTaskProperties, delayPoolQueueExecutor);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean({SingleDelayedQueue.class})
     public ShareDelayedQueue shareDelayedQueue(
             @Qualifier("delayPoolQueueExecutor") ThreadPoolTaskExecutor delayPoolQueueExecutor) {
         return new ShareDelayedQueue(
                 pooledTimerTaskProperties, delayPoolQueueExecutor, redissonClient);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean({ShareDelayedQueue.class})
-    public SingleDelayedQueue singleDelayedQueue(
-            @Qualifier("delayPoolQueueExecutor") ThreadPoolTaskExecutor delayPoolQueueExecutor) {
-        return new SingleDelayedQueue(pooledTimerTaskProperties, delayPoolQueueExecutor);
     }
 }
