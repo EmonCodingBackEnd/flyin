@@ -96,7 +96,7 @@ public abstract class PagingProp implements Serializable {
 
     /** 总页数. */
     public Integer getPageCount() {
-        if (getPageSize() == null) {
+        if (getPageSize() == null || getTotalResultCount() == null) {
             return null;
         }
         return (int) Math.ceil((double) getTotalResultCount() / (double) getPageSize());
