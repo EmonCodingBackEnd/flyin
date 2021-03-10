@@ -47,9 +47,9 @@ public class AppCacheArgumentResolver implements HandlerMethodArgumentResolver {
                 throw new AppException(AppStatus.U0340, "登录信息类型不匹配！");
             }
         } else {
-            log.error("【AppCacheArgumentResolver】登录信息丢失或尚未登录！");
+            log.error("【AppCacheArgumentResolver】登录信息丢失或已过期！");
             if (Objects.requireNonNull(appCache).required()) {
-                throw new AppException(AppStatus.U0230, "登录信息丢失或尚未登录！");
+                throw new AppException(AppStatus.U0230, "登录信息丢失或已过期！");
             }
             return null;
         }
