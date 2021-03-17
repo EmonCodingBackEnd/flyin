@@ -11,7 +11,7 @@ import org.apache.commons.net.ftp.FTPClient;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public interface FTPCallback<T> {
 
@@ -24,7 +24,7 @@ public interface FTPCallback<T> {
      * @param ftpClient - 无需关注连接与关闭的ftpClient实例
      * @return T - 返回结果
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     T doInCallback(FTPClient ftpClient) throws FTPException;
 }

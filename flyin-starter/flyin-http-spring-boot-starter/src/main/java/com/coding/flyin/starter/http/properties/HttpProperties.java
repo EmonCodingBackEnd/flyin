@@ -53,7 +53,7 @@ public class HttpProperties {
      * key=https:www.baidu.com:80, value=100<br>
      * 其中，key的默认schema是http，默认端口是80
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private Map<String, Integer> maxPerRouteMap = new HashMap<>();
 
@@ -63,7 +63,7 @@ public class HttpProperties {
      * <p>创建时间: <font style="color:#00FFFF">20180609 13:55</font><br>
      * [请在此输入功能详述]
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private Map<String, Integer> keepAliveHostMap = new HashMap<>();
 

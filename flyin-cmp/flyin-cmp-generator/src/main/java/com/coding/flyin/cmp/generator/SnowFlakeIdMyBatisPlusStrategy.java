@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
  *
  * @author emon
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class SnowFlakeIdMyBatisPlusStrategy implements IdentifierGenerator {
 
@@ -23,7 +23,7 @@ public class SnowFlakeIdMyBatisPlusStrategy implements IdentifierGenerator {
      * 采用默认数据中心ID(获取mac地址的低16位运算后作为数据中心ID)和默认工作ID初始化
      *
      * @author emon
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public SnowFlakeIdMyBatisPlusStrategy() {
         this.idGenerator = new SnowFlakeIdGenerator();

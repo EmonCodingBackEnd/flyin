@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public abstract class RegexSupport {
 
@@ -25,7 +25,7 @@ public abstract class RegexSupport {
      * @param value - 引用变量
      * @return com.ishanshan.regex.RegexResult 解析结果
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static WholeMatchRegexResult match$R(String value) {
         WholeMatchRegexResult result = WholeMatchRegexResult.instance();
@@ -50,7 +50,7 @@ public abstract class RegexSupport {
      * @param value - 格式化的日志
      * @return com.ishanshan.regex.RegexResult 解析结果
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static PartMatchRegexResult matchLogFormater(String value) {
         PartMatchRegexResult result = PartMatchRegexResult.instance();
@@ -85,7 +85,7 @@ public abstract class RegexSupport {
      * @param value - 引用变量
      * @return com.ishanshan.regex.RegexResult 解析结果
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static MobileRegexResult matchMobile(String value) {
         MobileRegexResult result = MobileRegexResult.instance();

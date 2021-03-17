@@ -8,7 +8,7 @@ package com.coding.flyin.starter.ftp.exception;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class FTPException extends RuntimeException {
 

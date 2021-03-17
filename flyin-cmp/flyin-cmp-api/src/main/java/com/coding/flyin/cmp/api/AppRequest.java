@@ -32,7 +32,7 @@ public class AppRequest extends AppSortingCondition implements Serializable {
     //     *
     //     * @return java.lang.Class<T>
     //     * @author Rushing0711
-    //     * @since 1.0.0
+    //     * @since 0.1.0
     //     */
     //    @SuppressWarnings("unchecked")
     //    public Class<T> responseClass() {

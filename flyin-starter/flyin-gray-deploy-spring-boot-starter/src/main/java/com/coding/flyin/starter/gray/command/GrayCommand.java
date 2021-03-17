@@ -37,7 +37,7 @@ public abstract class GrayCommand<T> extends CustomExecuteCommand<T> {
      * @param executionTimeoutInMilliseconds - 命令执行的超时时间
      * @param executionTimeoutEnabled - 是否打开超时中断命令执行
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public GrayCommand(
             String groupKey,
@@ -68,7 +68,7 @@ public abstract class GrayCommand<T> extends CustomExecuteCommand<T> {
      * @param poolSize - 线程池大小
      * @param executionTimeoutInMilliseconds - 命令执行的超时时间
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public GrayCommand(
             String groupKey,
@@ -90,7 +90,7 @@ public abstract class GrayCommand<T> extends CustomExecuteCommand<T> {
      * @param poolKey - 线程池名
      * @param poolSize - 线程池大小
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public GrayCommand(String groupKey, String commandKey, String poolKey, int poolSize) {
         this(groupKey, commandKey, poolKey, poolSize, 0, false);

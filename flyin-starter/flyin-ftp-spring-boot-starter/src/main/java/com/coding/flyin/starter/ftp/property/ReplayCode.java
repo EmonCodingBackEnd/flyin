@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public enum ReplayCode {
     FILE_STATUS_OK(FTPReply.FILE_STATUS_OK, "文件状态良好，打开数据连接"),

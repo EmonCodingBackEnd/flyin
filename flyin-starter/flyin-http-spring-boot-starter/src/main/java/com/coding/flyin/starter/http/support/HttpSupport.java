@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public abstract class HttpSupport {
 
@@ -33,7 +33,7 @@ public abstract class HttpSupport {
      * @return java.lang.String - 处理后的url，http://www.baidu.com?key1=val1&key2=val2 <font
      *     style="color:#FF0000"></font>=> http://www.baidu.com
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static String checkHasParams(String url, List<NameValuePair> pairList) {
         Assert.notNull(url, "url must be not null");
@@ -54,7 +54,7 @@ public abstract class HttpSupport {
      * @param paramMap - 参数Map
      * @return java.util.List<org.apache.http.NameValuePair>
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static List<NameValuePair> convertToPairList(Map<String, String> paramMap) {
         Assert.notNull(paramMap, "paramMap must be not null");
@@ -74,7 +74,7 @@ public abstract class HttpSupport {
      * @param params - 字符串形式的参数，形如：key1=val1&key2=val2......
      * @return java.util.Map<java.lang.String,java.lang.String>
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static Map<String, String> buildParams(String params) {
         String[] pms = params.split("&");
@@ -98,7 +98,7 @@ public abstract class HttpSupport {
      * @param params - 二维数组形式的请求参数，形如：params = {{key1,val1},{key2,val2}......}
      * @return java.util.Map<java.lang.String,java.lang.String> - 构建的参数Map
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static Map<String, String> buildParams(String[][] params) {
         Map<String, String> map = new HashMap<>();

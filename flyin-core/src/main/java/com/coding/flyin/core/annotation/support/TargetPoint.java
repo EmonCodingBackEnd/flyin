@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 @Getter
 @Setter
@@ -55,7 +55,7 @@ public class TargetPoint {
      * @param annotationType - 注解类，或者说注解类型的类型
      * @return A - 返回注解类型A的实例对象
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public <A extends Annotation> A getMethodAnnotation(Class<A> annotationType) {
         return AnnotationUtils.findAnnotation(this.method, annotationType);
@@ -71,7 +71,7 @@ public class TargetPoint {
      * @param annotationType - 注解类，或者说注解类型的类型
      * @return A - 返回注解类型A的实例对象
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public <A extends Annotation> A getClassAnnotation(Class<A> annotationType) {
         return AnnotationUtils.findAnnotation(this.target.getClass(), annotationType);
@@ -86,7 +86,7 @@ public class TargetPoint {
      * @param annotationType - 注解类，或者说注解类型的类型
      * @return java.lang.Class - 指定注解所在的第一个类
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public Class<?> findAnnotationDeclaringClass(Class<? extends Annotation> annotationType) {
         return AnnotationUtils.findAnnotationDeclaringClass(annotationType, this.target.getClass());

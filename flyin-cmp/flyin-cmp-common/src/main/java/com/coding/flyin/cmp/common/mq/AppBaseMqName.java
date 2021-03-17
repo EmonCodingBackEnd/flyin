@@ -16,7 +16,7 @@ public interface AppBaseMqName {
      *
      * @return java.lang.String
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     String getName();
 
@@ -37,7 +37,7 @@ public interface AppBaseMqName {
      * @param nameParts - 组成RedisKey的元素集合，不包含前缀，前缀是自动添加的
      * @return java.lang.String
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     default String combineNameParts(String... nameParts) {
         List<Object> keyList = new ArrayList<>();

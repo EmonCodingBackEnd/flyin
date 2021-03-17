@@ -3,6 +3,7 @@ package com.coding.flyin.cmp.api.annotation.resolver;
 import com.coding.flyin.cmp.api.AppResponse;
 import com.coding.flyin.cmp.api.annotation.IgnoreResponse;
 import com.coding.flyin.cmp.api.paging.AppPagingResponse;
+import com.coding.flyin.cmp.api.paging.AppPagingStandardResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.MethodParameter;
@@ -108,9 +109,13 @@ public class IgnoreResponseResolver implements ResponseBodyAdvice<Object> {
             return oriObject;
         }
         // 定义最终的返回对象
-        AppResponse<Object> response;
+        AppResponse response;
         if (null == oriObject) {
             response = AppResponse.getDefaultResponse();
+        } else if (oriObject instanceof AppPagingStandardResponse) {
+            response = AppPagingStandardResponse.getDefaultResponse();
+            BeanUtils.copyProperties(oriObject, response);
+            ((AppPagingStandardResponse) response).setPaging(null);
         } else if (oriObject instanceof AppPagingResponse) {
             response = AppPagingResponse.getDefaultResponse();
             BeanUtils.copyProperties(oriObject, response);

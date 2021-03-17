@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 @Slf4j
 public class SingleDelayedQueue {
@@ -50,7 +50,7 @@ public class SingleDelayedQueue {
      * @param delayTask - 延时任务，继承Thread类或实现Runnable接口的类
      * @param timeout - 延时时间，单位毫秒
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static void put(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
         log.info("【延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());

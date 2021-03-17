@@ -24,7 +24,7 @@ public class UploadParam extends BaseParam {
      * 默认false，如果设置为true，remoteDirectory无效<br>
      * 图片:images 音频:audios 视频:vedios 文本文件:files
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private boolean autoDetect = false;
 
@@ -34,7 +34,7 @@ public class UploadParam extends BaseParam {
      * <p>创建时间: <font style="color:#00FFFF">20180625 20:08</font><br>
      * [请在此输入功能详述]
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private List<File> fileList = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class UploadParam extends BaseParam {
      * <p>创建时间: <font style="color:#00FFFF">20180625 20:07</font><br>
      * [请在此输入功能详述]
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private List<MultipartFile> multipartFileList = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class UploadParam extends BaseParam {
      * <p>创建时间: <font style="color:#00FFFF">20180625 20:04</font><br>
      * 其中，key表示该字符串的原始文件名，value表示字符串内容格式的文件.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private Map<String, String> contentMap = new HashMap<>();
 
@@ -64,7 +64,7 @@ public class UploadParam extends BaseParam {
      * <p>创建时间: <font style="color:#00FFFF">20180625 20:05</font><br>
      * 其中，key表示该字符串的原始文件名，value表示输入流内容格式的文件.
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private Map<String, InputStream> inputStreamMap = new HashMap<>();
 }

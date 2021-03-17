@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public interface RegexDefine {
 
@@ -25,7 +25,7 @@ public interface RegexDefine {
      *   <li>示例：$R.TransCode
      * </ul>
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     String $R_REGEX = "^(\\$R)\\.(\\w+)$";
 
@@ -42,7 +42,7 @@ public interface RegexDefine {
      *   <li>示例：{}决定重新改写{}日志的格式化方式为{}
      * </ul>
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     String LOG_FORMATER_REGEX = "\\{\\}";
 
@@ -69,7 +69,7 @@ public interface RegexDefine {
      *   <li>示例：18767188240
      * </ul>
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     String MOBILE_REGEX =
             "^((?:13[0-9])|(?:14[5|7|9])|(?:15(?:[0-3]|[5-9]))|(?:16[6])|(?:17[01235678])|(?:18[0-9])|(?:19[189]))\\d{4}(\\d{4})$";

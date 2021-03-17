@@ -12,7 +12,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class GenericFTPClientPool extends GenericObjectPool<FTPClient> {
 

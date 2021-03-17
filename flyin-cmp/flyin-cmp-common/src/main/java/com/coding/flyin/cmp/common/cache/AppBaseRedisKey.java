@@ -16,7 +16,7 @@ public interface AppBaseRedisKey {
      *
      * @return java.lang.String
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     String getKey();
 
@@ -29,7 +29,7 @@ public interface AppBaseRedisKey {
      * @param keyVar - key中的变量部分
      * @return java.lang.String
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     String getKey(String... keyVar);
 
@@ -51,7 +51,7 @@ public interface AppBaseRedisKey {
      * @param keyParts - 组成RedisKey的元素集合，不包含前缀，前缀是自动添加的
      * @return java.lang.String
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     default String combineKeyParts(boolean endWithColon, String... keyParts) {
         List<Object> keyList = new ArrayList<>();

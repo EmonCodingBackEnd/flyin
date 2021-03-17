@@ -13,7 +13,7 @@ import org.apache.http.protocol.HTTP;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public abstract class HeaderSupport {
     /**
@@ -23,7 +23,7 @@ public abstract class HeaderSupport {
      *
      * <p>数据被编码为<key,value>名/值对，标准的编码格式
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static final Header[] KEEP_ALIVE_ENCODED_HEADERS =
             HeaderGeneretor.custom()
@@ -38,7 +38,7 @@ public abstract class HeaderSupport {
      * <p>创建时间: <font style="color:#00FFFF">20180609 13:31</font><br>
      * [请在此输入功能详述]
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static final Header[] CLOSE_ENCODED_HEADERS =
             HeaderGeneretor.custom()
@@ -53,7 +53,7 @@ public abstract class HeaderSupport {
      * <p>创建时间: <font style="color:#00FFFF">20180609 10:22</font><br>
      * [请在此输入功能详述]
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static Header[] KEEP_ALIVE_JSON_HEADERS =
             HeaderGeneretor.custom()
@@ -68,7 +68,7 @@ public abstract class HeaderSupport {
      * <p>创建时间: <font style="color:#00FFFF">20180609 11:01</font><br>
      * [请在此输入功能详述]
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static Header[] KEEP_ALIVE_JSON_UTF8_HEADERS =
             HeaderGeneretor.custom()
@@ -83,7 +83,7 @@ public abstract class HeaderSupport {
      * <p>创建时间: <font style="color:#00FFFF">20180609 10:58</font><br>
      * [请在此输入功能详述]
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static Header[] KEEP_ALIVE_XML_HEADERS =
             HeaderGeneretor.custom()
@@ -98,7 +98,7 @@ public abstract class HeaderSupport {
      * <p>创建时间: <font style="color:#00FFFF">20180609 11:03</font><br>
      * [请在此输入功能详述]
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public static Header[] KEEP_ALIVE_XML_UTF8_HEADERS =
             HeaderGeneretor.custom()

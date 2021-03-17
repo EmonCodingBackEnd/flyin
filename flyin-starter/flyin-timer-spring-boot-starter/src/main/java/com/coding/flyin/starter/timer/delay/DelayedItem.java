@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class DelayedItem<T extends DelayTask> implements Delayed {
 
@@ -42,7 +42,7 @@ public class DelayedItem<T extends DelayTask> implements Delayed {
      * @param unit -
      * @return long
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     @Override
     public long getDelay(TimeUnit unit) {

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Rushing0711
  * @version 1.0.0
- * @since 1.0.0
+ * @since 0.1.0
  */
 public abstract class DelayRetryTask implements DelayTask {
 
@@ -33,7 +33,7 @@ public abstract class DelayRetryTask implements DelayTask {
      *   <li>如果重新设置了时间间隔，则间隔数等于最大重试次数
      * </ul>
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     private long[] retryInterval = {
         TimeUnit.SECONDS.toMillis(15),
@@ -70,7 +70,7 @@ public abstract class DelayRetryTask implements DelayTask {
      *
      * @param retryInterval - 重试间隔字符串表示的值，例如 15,30,60 表示允许重试3次，频率为15/30/60，单位：秒
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public void setRetryInterval(String retryInterval) {
         if (!StringUtils.isEmpty(retryInterval)) {
@@ -90,7 +90,7 @@ public abstract class DelayRetryTask implements DelayTask {
      *
      * @return boolean
      * @author Rushing0711
-     * @since 1.0.0
+     * @since 0.1.0
      */
     public boolean canIRetry() {
         return this.getRetryTimes() < this.getMaxRetryTimes();
