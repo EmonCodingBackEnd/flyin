@@ -7,6 +7,7 @@ import com.coding.flyin.starter.gray.rule.filter.RuleFilter;
 import com.coding.flyin.starter.gray.rule.filter.RuleFilterFactory;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,6 +33,7 @@ public class GrayWebMvcFilter extends OncePerRequestFilter {
         if (StringUtils.isEmpty(traceId)) {
             traceId = "TID:N/A";
         }
+        MDC.put(GlobalConstants.TRACE_ID, traceId);
 
         RuleFilter rule = RuleFilterFactory.create(reqLabels);
         String effectiveLabels = ruleProperties.updateRule(rule);
