@@ -12,6 +12,9 @@ public abstract class GrayInterceptorHelper {
     public static final HystrixRequestVariableDefault<RuleFilter> rule =
             new HystrixRequestVariableDefault<>();
 
+    public static final HystrixRequestVariableDefault<String> trace =
+            new HystrixRequestVariableDefault<>();
+
     public static void initHystrixRequestContext(String labels) {
         if (!HystrixRequestContext.isCurrentThreadInitialized()) {
             HystrixRequestContext.initializeContext();

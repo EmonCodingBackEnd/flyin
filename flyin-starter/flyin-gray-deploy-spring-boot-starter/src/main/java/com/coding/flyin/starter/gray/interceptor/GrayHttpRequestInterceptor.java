@@ -1,5 +1,6 @@
 package com.coding.flyin.starter.gray.interceptor;
 
+import com.coding.flyin.core.GlobalConstants;
 import com.coding.flyin.starter.gray.constant.GrayConstants;
 import com.coding.flyin.starter.gray.rule.filter.RuleFilter;
 import lombok.Setter;
@@ -22,8 +23,10 @@ public class GrayHttpRequestInterceptor implements ClientHttpRequestInterceptor 
             throws IOException {
         HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
         RuleFilter rule = GrayInterceptorHelper.rule.get();
+        String traceId = GrayInterceptorHelper.trace.get();
         if (rule != null) {
             requestWrapper.getHeaders().add(GrayConstants.RULE_HEADER, rule.toRule());
+            requestWrapper.getHeaders().add(GlobalConstants.TRACE_ID, traceId);
         }
         return execution.execute(request, body);
     }

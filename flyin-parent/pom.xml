@@ -77,6 +77,10 @@
         <!-- 引入二方包 end -->
 
         <!-- 引入一方包 beg -->
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-core</artifactId>
+        </dependency>
         <!-- 引入一方包 end -->
     </dependencies>
 
