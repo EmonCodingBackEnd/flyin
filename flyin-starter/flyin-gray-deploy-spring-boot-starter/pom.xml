@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.coding.flyin</groupId>
         <artifactId>flyin-starter</artifactId>
-        <version>0.1.19</version>
+        <version>0.1.20</version>
     </parent>
 
     <artifactId>flyin-gray-deploy-spring-boot-starter</artifactId>
@@ -44,6 +44,10 @@
         <!-- 引入二方包 end -->
 
         <!-- 引入一方包 beg -->
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-core</artifactId>
+        </dependency>
         <!-- 引入一方包 end -->
     </dependencies>
 
