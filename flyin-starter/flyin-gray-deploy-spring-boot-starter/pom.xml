@@ -48,6 +48,10 @@
             <groupId>com.coding.flyin</groupId>
             <artifactId>flyin-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-cmp-auth</artifactId>
+        </dependency>
         <!-- 引入一方包 end -->
     </dependencies>
 
