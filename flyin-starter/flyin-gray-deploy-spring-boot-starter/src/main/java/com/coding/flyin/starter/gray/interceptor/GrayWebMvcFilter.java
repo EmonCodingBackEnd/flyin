@@ -43,10 +43,8 @@ public class GrayWebMvcFilter extends OncePerRequestFilter {
         log.info("req rule: {} and effective rule: {}", reqLabels, effectiveLabels);
         GrayInterceptorHelper.initHystrixRequestContext(effectiveLabels);
 
-        log.info("{}", GrayInterceptorHelper.headers.get());
         GrayInterceptorHelper.addHeader(GlobalConstants.TRACE_ID, traceId);
         GrayInterceptorHelper.addHeader(JwtToken.TOKEN_HEADER, authHeader);
-        log.info("{}", GrayInterceptorHelper.headers.get());
         try {
             filterChain.doFilter(request, response);
         } finally {
