@@ -87,7 +87,7 @@ public abstract class GrayInterceptorHelper {
 
     public static List<String> replaceHeader(String key, LinkedList<String> valueList) {
         Assert.notNull(key, "Only non-null key instances are permitted");
-        Assert.notNull(valueList, "Only non-null value instances are permitted");
+        Assert.notNull(valueList, "Only non-null valueList instances are permitted");
         if (GrayInterceptorHelper.headers.get() == null) {
             GrayInterceptorHelper.headers.set(new LinkedMultiValueMap<>());
         }
