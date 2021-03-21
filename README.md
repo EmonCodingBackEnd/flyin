@@ -10,7 +10,7 @@
 ```
 ## 说明如下：
 
-type：必需，说明comit的类别，只允许使用下面8个标识
+type：必需，说明comit的类别，只允许使用下面9个标识
 - feat:新功能(feature)【常用】
 - fix:修补bug【常用】
 - wipe:移除文件、文档或者代码
@@ -21,6 +21,7 @@ type：必需，说明comit的类别，只允许使用下面8个标识
 - test:增加测试
 - chore:构建过程或者辅助工具的变动
 - revert:特殊情况，对当前commit用于撤销以前的commit，后面加上被撤销的commit
+- version:项目版本号迭代
 
 scope:可选，说明commit影响的范围，比如数据层、控制层、视图层等，视项目情况而不同
 
