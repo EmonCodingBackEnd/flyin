@@ -3,6 +3,7 @@ package com.coding.flyin.cmp.api.paging;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @JsonPropertyOrder({
     "isCursorPaging",
@@ -16,9 +17,19 @@ import java.io.Serializable;
     "first",
     "last"
 })
-public abstract class PagingProp implements Serializable {
+public class PagingProp implements Serializable {
 
     private static final long serialVersionUID = 4149762063559317208L;
+
+    /** 创建一个非游标分页属性对象，isCursorPaging=false. */
+    public PagingProp() {
+        this.isCursorPaging = false;
+    }
+
+    /** 创建一个指定isCursorPaging标志的分页属性对象，true-游标分页对象；false-普通分页对象. */
+    public PagingProp(boolean isCursorPaging) {
+        this.isCursorPaging = isCursorPaging;
+    }
 
     /**
      * 是否游标分页
@@ -51,7 +62,9 @@ public abstract class PagingProp implements Serializable {
 
     // ==================================================华丽的分割线==================================================
 
-    public abstract boolean isCursorPaging();
+    public boolean isCursorPaging() {
+        return isCursorPaging;
+    }
 
     public String getCursor() {
         return cursor;
@@ -105,13 +118,90 @@ public abstract class PagingProp implements Serializable {
         : (int) Math.ceil((double) getTotalResultCount() / (double) getPageSize());*/
     }
 
+    private Long getOffset() {
+        if (getPageIndex() == null || getPageSize() == null) {
+            return null;
+        }
+        return (long) pageIndex * (long) pageSize;
+    }
+
+    /** 分页开始数据行：从1开始. */
+    public Long getStart() {
+        if (getOffset() == null) {
+            return null;
+        }
+        return getOffset() + 1;
+    }
+
+    /** 分页截止数据行. */
+    public Long getEnd() {
+        if (getOffset() == null || getResultCount() == null) {
+            return null;
+        }
+        return getOffset() + getResultCount();
+    }
+
+    /** 是否有上一页. */
+    public Boolean hasPrevious() {
+        if (getPageIndex() == null) {
+            return null;
+        }
+        return getPageIndex() > 0;
+    }
+
+    /** 是否有下一页. */
+    public Boolean hasNext() {
+        if (getPageSize() == null || getTotalResultCount() == null) {
+            return null;
+        }
+        return getPageIndex() + 1 < getPageCount();
+    }
+
     /** 是否首页. */
-    public abstract Boolean isFirst();
+    public Boolean isFirst() {
+        if (isCursorPaging) {
+            return first;
+        }
+        return !hasPrevious();
+    }
 
     void setFirst(boolean first) {
         this.first = first;
     }
 
-    /** 是否有下一页. */
-    public abstract Boolean isLast();
+    /** 是否最后一页. */
+    public Boolean isLast() {
+        if (isCursorPaging) {
+            return getCursor() == null;
+        } else {
+            return Objects.isNull(hasNext()) ? null : !hasNext();
+        }
+    }
 }
+
+// @Slf4j
+// public class PagingPropJsonDeserializer extends JsonDeserializer<PagingProp> {
+//    @Override
+//    public PagingProp deserialize(JsonParser p, DeserializationContext ctxt)
+//            throws IOException, JsonProcessingException {
+//        JsonNode node = p.getCodec().readTree(p);
+//        boolean isCursorPaging =
+//                node.has("isCursorPaging") && node.get("isCursorPaging").asBoolean();
+//        try {
+//            log.info("json={}", p.getText());
+//            if (isCursorPaging) {
+//                return p.getCodec().readValue(p, CursorPagingProp.class);
+//            } else {
+//                return p.getCodec().readValue(p, NormalPagingProp.class);
+//            }
+//        } catch (IOException e) {
+//            log.error(
+//                    String.format(
+//                            "Can not deserialize %s to %s",
+//                            p.getText(),
+//                            isCursorPaging ? CursorPagingProp.class : NormalPagingProp.class),
+//                    e);
+//            throw e;
+//        }
+//    }
+// }

@@ -2,6 +2,7 @@ package com.coding.flyin.cmp.api.paging;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 @JsonPropertyOrder({"paging", "extraData", "results"})
 public final class AppPagingData<T, E> implements Serializable {
     private static final long serialVersionUID = -2205716652505827942L;
@@ -31,6 +33,10 @@ public final class AppPagingData<T, E> implements Serializable {
 
     /** 分页接口返回的列表数据. */
     protected List<E> results;
+
+    public AppPagingData(List<E> results) {
+        this.results = results;
+    }
 
     public AppPagingData(PagingProp paging, List<E> results) {
         this.paging = paging;

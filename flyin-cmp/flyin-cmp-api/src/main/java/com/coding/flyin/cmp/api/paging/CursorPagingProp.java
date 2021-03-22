@@ -2,7 +2,9 @@ package com.coding.flyin.cmp.api.paging;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+/** 说明：分页属性归并到PagingProp类，后续该类将移除. */
+@Deprecated
+// @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CursorPagingProp extends PagingProp {
 
     private static final long serialVersionUID = 2458992395193291045L;
@@ -14,13 +16,13 @@ public class CursorPagingProp extends PagingProp {
         return true;
     }
 
-    @Override
-    public Boolean isFirst() {
-        return first;
-    }
-
-    @Override
-    public Boolean isLast() {
-        return getCursor() == null;
-    }
+    //    @Override
+    //    public Boolean isFirst() {
+    //        return first;
+    //    }
+    //
+    //    @Override
+    //    public Boolean isLast() {
+    //        return getCursor() == null;
+    //    }
 }
