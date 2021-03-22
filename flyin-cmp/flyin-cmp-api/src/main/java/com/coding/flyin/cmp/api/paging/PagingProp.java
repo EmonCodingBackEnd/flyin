@@ -1,5 +1,7 @@
 package com.coding.flyin.cmp.api.paging;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.io.Serializable;
@@ -21,13 +23,14 @@ public class PagingProp implements Serializable {
 
     private static final long serialVersionUID = 4149762063559317208L;
 
-    /** 创建一个非游标分页属性对象，isCursorPaging=false. */
-    public PagingProp() {
-        this.isCursorPaging = false;
-    }
+//    /** 创建一个非游标分页属性对象，isCursorPaging=false. */
+//    public PagingProp() {
+//        this.isCursorPaging = false;
+//    }
 
     /** 创建一个指定isCursorPaging标志的分页属性对象，true-游标分页对象；false-普通分页对象. */
-    public PagingProp(boolean isCursorPaging) {
+    @JsonCreator
+    public PagingProp(@JsonProperty("isCursorPaging") boolean isCursorPaging) {
         this.isCursorPaging = isCursorPaging;
     }
 
