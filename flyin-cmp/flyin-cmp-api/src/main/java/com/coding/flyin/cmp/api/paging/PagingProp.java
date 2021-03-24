@@ -5,6 +5,7 @@ import com.coding.flyin.cmp.exception.AppStatus;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -21,6 +22,7 @@ import java.util.Objects;
     "first",
     "last"
 })
+@Slf4j
 public class PagingProp implements Serializable {
 
     private static final long serialVersionUID = 4149762063559317208L;
@@ -196,6 +198,8 @@ public class PagingProp implements Serializable {
 
     public void validateNoisy() {
         if (!validate()) {
+            log.error(
+                    "PagingProp validate invalid, if isCursorPaging=false, pageIndex,pageSize,resultCount,totalResultCount can not be null");
             throw new AppException(
                     AppStatus.S0001,
                     "PagingProp validate invalid, if isCursorPaging=false, pageIndex,pageSize,resultCount,totalResultCount can not be null");
