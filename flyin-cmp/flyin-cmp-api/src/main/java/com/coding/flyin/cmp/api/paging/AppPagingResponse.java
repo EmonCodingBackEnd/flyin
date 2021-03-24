@@ -2,7 +2,6 @@ package com.coding.flyin.cmp.api.paging;
 
 import com.coding.flyin.cmp.api.AppResponse;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -77,8 +76,10 @@ public class AppPagingResponse<T> extends AppResponse<T> {
      */
     @Deprecated protected PagingProp paging;
 
-    public void setPaging(@NonNull PagingProp paging) {
-        paging.validateNoisy();
+    public void setPaging(PagingProp paging) {
+        if (paging != null) {
+            paging.validateNoisy();
+        }
         this.paging = paging;
     }
 

@@ -3,7 +3,6 @@ package com.coding.flyin.cmp.api.paging;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -39,21 +38,27 @@ public final class AppPagingData<T, E> implements Serializable {
         this.results = results;
     }
 
-    public AppPagingData(@NonNull PagingProp paging, List<E> results) {
-        paging.validateNoisy();
+    public AppPagingData(PagingProp paging, List<E> results) {
+        if (paging != null) {
+            paging.validateNoisy();
+        }
         this.paging = paging;
         this.results = results;
     }
 
-    public AppPagingData(@NonNull PagingProp paging, T extraData, List<E> results) {
-        paging.validateNoisy();
+    public AppPagingData(PagingProp paging, T extraData, List<E> results) {
+        if (paging != null) {
+            paging.validateNoisy();
+        }
         this.paging = paging;
         this.extraData = extraData;
         this.results = results;
     }
 
-    public void setPaging(@NonNull PagingProp paging) {
-        paging.validateNoisy();
+    public void setPaging(PagingProp paging) {
+        if (paging != null) {
+            paging.validateNoisy();
+        }
         this.paging = paging;
     }
 }
