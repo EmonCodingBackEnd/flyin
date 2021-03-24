@@ -1,5 +1,7 @@
 package com.coding.flyin.cmp.api.paging;
 
+import com.coding.flyin.cmp.exception.AppException;
+import com.coding.flyin.cmp.exception.AppStatus;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -23,12 +25,23 @@ public class PagingProp implements Serializable {
 
     private static final long serialVersionUID = 4149762063559317208L;
 
-//    /** 创建一个非游标分页属性对象，isCursorPaging=false. */
-//    public PagingProp() {
-//        this.isCursorPaging = false;
-//    }
+    //    /** 创建一个非游标分页属性对象，isCursorPaging=false. */
+    //    public PagingProp() {
+    //        this.isCursorPaging = false;
+    //    }
 
-    /** 创建一个指定isCursorPaging标志的分页属性对象，true-游标分页对象；false-普通分页对象. */
+    /**
+     * 创建一个分页属性对象.
+     *
+     * <p>创建时间: <font style="color:#00FFFF">20210324 18:02</font><br>
+     * 如果isCursorPaging=false，则认为不是游标分页，而是一个完备的普通分页，要求
+     * pageIndex,pageSize,resultCount,totalResultCount 都存在。<br>
+     * 如果isCursorPaging=true，则认为是一个游标分页，不会对分页属性做特殊要求<br>
+     *
+     * @param isCursorPaging - 是否游标分页，true-游标分页对象；false-普通分页对象
+     * @author emon
+     * @since 0.1.26
+     */
     @JsonCreator
     public PagingProp(@JsonProperty("isCursorPaging") boolean isCursorPaging) {
         this.isCursorPaging = isCursorPaging;
@@ -179,6 +192,24 @@ public class PagingProp implements Serializable {
         } else {
             return Objects.isNull(hasNext()) ? null : !hasNext();
         }
+    }
+
+    public void validateNoisy() {
+        if (!validate()) {
+            throw new AppException(
+                    AppStatus.S0001,
+                    "PagingProp validate invalid, if isCursorPaging=false, pageIndex,pageSize,resultCount,totalResultCount can not be null");
+        }
+    }
+
+    public boolean validate() {
+        if (!isCursorPaging) {
+            return getPageIndex() != null
+                    && getPageSize() != null
+                    && getResultCount() != null
+                    && getTotalResultCount() != null;
+        }
+        return true;
     }
 }
 

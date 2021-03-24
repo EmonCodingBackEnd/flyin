@@ -60,13 +60,12 @@ public abstract class PagingHelper {
     }
 
     /**
-     * 转换<br>
-     * com.baomidou.mybatisplus.core.metadata.IPage<br>
+     * 生成一个游标分页的分页对象<br>
      * --><br>
-     * PagingProp
+     * PagingProp<br>
      *
      * @param isFirstQuery 游标查询是否首次查询
-     * @param cursor 游标分页时的游标（比如MongoDB和ElasticSearch）
+     * @param cursor 游标分页时的游标（比如MongoDB和ElasticSearch），如果cursor为null，表示已经到了最后一页，否则应该传入非null的值，用于下次查询的偏移量。
      * @return - PagingProp
      */
     public static PagingProp fromCursorPage(@NonNull boolean isFirstQuery, String cursor) {
