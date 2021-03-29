@@ -34,10 +34,6 @@ public final class AppPagingData<T, E> implements Serializable {
     /** 分页接口返回的列表数据. */
     protected List<E> results;
 
-    public AppPagingData(List<E> results) {
-        this.results = results;
-    }
-
     public AppPagingData(PagingProp paging, List<E> results) {
         if (paging != null) {
             paging.validateNoisy();
