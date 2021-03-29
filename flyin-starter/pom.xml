@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.coding.flyin</groupId>
         <artifactId>flyin-parent</artifactId>
-        <version>0.1.26</version>
+        <version>0.1.27</version>
         <relativePath>../flyin-parent/pom.xml</relativePath>
     </parent>
 
