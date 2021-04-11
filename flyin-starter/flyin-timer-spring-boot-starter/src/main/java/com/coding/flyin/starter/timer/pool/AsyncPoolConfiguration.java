@@ -2,6 +2,7 @@ package com.coding.flyin.starter.timer.pool;
 
 import com.coding.flyin.starter.timer.PooledTimerTaskProperties;
 import com.coding.flyin.starter.timer.async.AsyncConfig;
+import com.coding.flyin.starter.timer.async.AsyncMDCTaskDecorator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,6 +52,7 @@ public class AsyncPoolConfiguration {
          * CALLER_RUNS：不在新线程中执行任务，而是由调用者所在的线程来执行。
          */
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.setTaskDecorator(new AsyncMDCTaskDecorator());
         executor.initialize();
         return executor;
     }
