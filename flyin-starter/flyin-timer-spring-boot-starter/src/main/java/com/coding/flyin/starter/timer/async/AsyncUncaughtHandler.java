@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 @Slf4j
 public class AsyncUncaughtHandler implements AsyncUncaughtExceptionHandler {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     @SuppressWarnings("all")
