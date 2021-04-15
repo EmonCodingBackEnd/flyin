@@ -19,7 +19,7 @@ import java.util.concurrent.Executor;
 @Slf4j
 public class AsyncConfig implements AsyncConfigurer {
 
-    private Executor asyncPoolExecutor;
+    private final Executor asyncPoolExecutor;
 
     public AsyncConfig(Executor asyncPoolExecutor) {
         this.asyncPoolExecutor = asyncPoolExecutor;

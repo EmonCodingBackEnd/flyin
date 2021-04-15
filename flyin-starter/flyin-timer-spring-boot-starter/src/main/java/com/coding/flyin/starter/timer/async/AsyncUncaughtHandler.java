@@ -34,13 +34,12 @@ public class AsyncUncaughtHandler implements AsyncUncaughtExceptionHandler {
         // TODO: 2019/12/15 发送邮件或短信，做进一步处理
     }
 
-    private String toJsonByJackson(Object object) {
+    private Object toJsonByJackson(Object object) {
         String result;
         try {
             result = objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            log.error(String.format("【JSON转换错误】对象转换到JSON错误, object=%s", object), e);
-            throw new RuntimeException("对象转换到JSON错误");
+            return object;
         }
         return result;
     }
