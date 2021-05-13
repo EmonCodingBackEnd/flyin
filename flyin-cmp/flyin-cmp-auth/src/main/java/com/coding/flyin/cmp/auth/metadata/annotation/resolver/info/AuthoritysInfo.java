@@ -40,7 +40,7 @@ public class AuthoritysInfo {
      * 构造权限校验信息.
      *
      * <p>创建时间: <font style="color:#00FFFF">20210510 22:52</font><br>
-     * 根据入参 {@linkplain Authoritys 一组权限校验注解} 和 {@linkplain Authority 单个权限校验注解} 构造权限校验信息，有限使用前者
+     * 根据入参 {@linkplain Authoritys 一组权限校验注解} 和 {@linkplain Authority 单个权限校验注解} 构造权限校验信息，优先使用前者
      *
      * @param authoritys - 一组权限校验注解
      * @param authority - 单个权限校验注解

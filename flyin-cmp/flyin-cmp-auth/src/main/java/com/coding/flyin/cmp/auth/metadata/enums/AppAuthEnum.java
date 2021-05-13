@@ -21,7 +21,7 @@ public enum AppAuthEnum {
 
     /**
      * 返回不带有scope的redisKey.<br>
-     * instance = TOKEN<br>
+     * 场景举例：AppAuthEnum的instance = TOKEN<br>
      * prefixKey = "prefixKey:10000"<br>
      * fullKey(prefixKey) -> "prefixKey:10000:token"<br>
      */
@@ -31,7 +31,7 @@ public enum AppAuthEnum {
 
     /**
      * 返回带有scope的redisKey.<br>
-     * instance = SESSION<br>
+     * 场景举例：AppAuthEnum的instance  = SESSION<br>
      * metadata.scope = "default"<br>
      * fullKey(metadata) -> "session:default"<br>
      */
@@ -41,7 +41,7 @@ public enum AppAuthEnum {
 
     /**
      * 返回带有scope的full redisKey.<br>
-     * instance = PERMISSON<br>
+     * 场景举例：AppAuthEnum的instance = PERMISSON<br>
      * metadata.prefixKey = "prefixKey:10000"<br>
      * metadata.scope = "default"<br>
      * fullKey(metadata) -> "prefixKey:10000:permisson:default"<br>

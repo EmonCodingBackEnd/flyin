@@ -28,12 +28,12 @@ public class AppMetadata<T extends AppSession> implements Serializable {
      *   <li>用户的权限信息：用于授权
      * </ol>
      *
-     * 针对以上各种情况，一个用户可以保存多个缓存信息；这些信息有通用的 prefixKey 和 和专有标志信息拼接成最终的 redisKey。<br>
+     * 针对以上各种情况，一个用户可以保存多个缓存信息；这些信息有通用的 prefixKey 和 专有标志信息拼接成最终的 redisKey。<br>
      * 专有标志信息参考 {@linkplain AppAuthEnum 用户缓存类型定义枚举 }
      */
     private String prefixKey;
 
-    /** 对于一个用户来讲，可能在不同的 租户 下有不同的用户缓存信息， scope 表示当前在某个 租户下。 */
+    /** 对于一个用户来讲，可能在不同的 租户 下有不同的用户缓存信息， scope 表示当前在某个租户下。 */
     private String scope = "default";
 
     private Class<T> clazz;
