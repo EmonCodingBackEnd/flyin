@@ -31,12 +31,29 @@ public enum AppAuthEnum {
 
     /**
      * 返回带有scope的redisKey.<br>
-     * 场景举例：AppAuthEnum的instance  = SESSION<br>
+     * 场景举例：AppAuthEnum的instance = SESSION<br>
      * metadata.scope = "default"<br>
      * fullKey(metadata) -> "session:default"<br>
      */
     public String scopeKey(@NonNull AppMetadata metadata) {
-        return this.getKey().concat(AppBaseRedisKey.getDelimiter()).concat(metadata.getScope());
+        return scopeKey(metadata.getScope());
+    }
+
+    /**
+     * 返回带有scope的redisKey.<br>
+     *
+     * <p>创建时间: <font style="color:#00FFFF">20210630 09:48</font><br>
+     * 场景举例：AppAuthEnum的instance = SESSION<br>
+     * scope = "default"<br>
+     * fullKey(metadata) -> "session:default"<br>
+     *
+     * @param scope - 不可为空的值，表示某一个业务范围，比如：某个机构，某个门店等
+     * @return java.lang.String
+     * @author emon
+     * @since 0.1.30
+     */
+    public String scopeKey(@NonNull String scope) {
+        return this.getKey().concat(AppBaseRedisKey.getDelimiter()).concat(scope);
     }
 
     /**
@@ -47,8 +64,25 @@ public enum AppAuthEnum {
      * fullKey(metadata) -> "prefixKey:10000:permisson:default"<br>
      */
     private String scopeFullKey(@NonNull AppMetadata metadata) {
-        return fullKey(metadata.getPrefixKey())
-                .concat(AppBaseRedisKey.getDelimiter())
-                .concat(metadata.getScope());
+        return scopeFullKey(metadata.getPrefixKey(), metadata.getScope());
+    }
+
+    /**
+     * 返回带有scope的full redisKey.<br>
+     *
+     * <p>创建时间: <font style="color:#00FFFF">20210630 09:51</font><br>
+     * 场景举例：AppAuthEnum的instance = PERMISSON<br>
+     * prefixKey = "prefixKey:10000"<br>
+     * scope = "default"<br>
+     * fullKey(metadata) -> "prefixKey:10000:permisson:default"<br>
+     *
+     * @param prefixKey - redisKey的前缀，例如表示token的 <code>String prefixKey = AppAuthEnum.TOKEN.getKey(userId)</code>
+     * @param scope - 不可为空的值，表示某一个业务范围，比如：某个机构，某个门店等
+     * @return java.lang.String
+     * @author emon
+     * @since 0.1.30
+     */
+    private String scopeFullKey(@NonNull String prefixKey, @NonNull String scope) {
+        return fullKey(prefixKey).concat(AppBaseRedisKey.getDelimiter()).concat(scope);
     }
 }

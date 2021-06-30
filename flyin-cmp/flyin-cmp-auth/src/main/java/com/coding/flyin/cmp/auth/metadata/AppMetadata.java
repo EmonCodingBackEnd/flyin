@@ -1,6 +1,8 @@
 package com.coding.flyin.cmp.auth.metadata;
 
 import com.coding.flyin.cmp.auth.metadata.enums.AppAuthEnum;
+import com.coding.flyin.cmp.exception.AppException;
+import com.coding.flyin.cmp.exception.AppStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -37,6 +39,16 @@ public class AppMetadata<T extends AppSession> implements Serializable {
     private String scope = "default";
 
     private Class<T> clazz;
+
+    /** 为一个token维护一份轻量级数据，控制为50个字符以内. */
+    private String lightData;
+
+    public void setLightData(String lightData) {
+        if (lightData != null && lightData.length() > 50) {
+            throw new AppException(AppStatus.S0001, "Exceeding the maximum length of 50");
+        }
+        this.lightData = lightData;
+    }
 
     public static AppMetadata getInstance() {
         return new AppMetadata();
