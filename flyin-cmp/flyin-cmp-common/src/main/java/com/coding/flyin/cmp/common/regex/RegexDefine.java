@@ -78,10 +78,10 @@ public interface RegexDefine {
 
     // (((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$
     String URL_REGEX =
-            "(^(https?)://(?:[\\w:.-]+)?((?:\\/[\\+~%\\/.\\w-_]*)?))\\??([-\\+=&;%@.\\w_]*)#?(?:[\\w]*)$";
+            "(^(https?)://(?:[\\w:.-]+)?((?:\\/[\\+~%\\/.\\w-_#]*)?))\\??([-\\+=&;%@.\\w_]*)#?(?:[\\w]*)$";
     Pattern URL_REGEX_PATTERN = Pattern.compile(URL_REGEX);
 
-    String URI_REGEX = "^(https?)://(?:[\\w:.-]+)?((?:\\/[\\+~%\\/.\\w-_]*)?)$";
+    String URI_REGEX = "^(https?)://(?:[\\w:.-]+)?((?:\\/[\\+~%\\/.\\w-_#]*)?)$";
     Pattern URI_REGEX_PATTERN = Pattern.compile(URI_REGEX);
 
     String URL_PARAM_REGEX = "\\??([-\\+=&;%@.\\w_]*)#?(?:[\\w]*)";
@@ -89,28 +89,31 @@ public interface RegexDefine {
 
     /** 严格的文件名校验，需要完全匹配. */
     String STRICT_FILENAME_REGEX =
-            "^(?:([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(\\w+))|(?:([^<>/\\\\\\|:\"\"\\*\\?]+))$";
+            "^(?:(?:([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(\\w+)\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))|(?:([^<>/\\\\\\|:\"\"\\*\\?]+)))$";
 
     Pattern STRICT_FILENAME_REGEX_PATTERN = Pattern.compile(STRICT_FILENAME_REGEX);
 
     /** 不严格的文件名校验，不需要完全匹配. */
     String FILENAME_REGEX =
-            "(?:([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(\\w+))|(?:([^<>/\\\\\\|:\"\"\\*\\?]+))$";
+            "(?:(?:([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(\\w+)\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))|(?:([^<>/\\\\\\|:\"\"\\*\\?]+)))$";
 
     Pattern FILENAME_REGEX_PATTERN = Pattern.compile(FILENAME_REGEX);
 
     /** 验证文件是否图片. */
-    String IMAGE_REGEX = "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG)$";
+    String IMAGE_REGEX =
+            "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG)\\??([-\\+=&;%@.\\w_]*)#?(?:[\\w]*)$";
 
     Pattern IMAGE_REGEX_PATTERN = Pattern.compile(IMAGE_REGEX);
 
     /** 验证文件是否音频. */
-    String AUDIO_REGEX = "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(mp3|MP3|wav|WAV|ape|APE|flac|m4a|aac)$";
+    String AUDIO_REGEX =
+            "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(mp3|MP3|wav|WAV|ape|APE|flac|m4a|aac)\\??([-\\+=&;%@.\\w_]*)#?(?:[\\w]*)$";
 
     Pattern AUDIO_REGEX_PATTERN = Pattern.compile(AUDIO_REGEX);
 
     /** 验证文件是否视频. */
-    String VEDIO_REGEX = "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(mp4|avi|rmvb|flv|wmv|vob|mkv|mov)$";
+    String VEDIO_REGEX =
+            "([^<>/\\\\\\|:\"\"\\*\\?]+)\\.(mp4|avi|rmvb|flv|wmv|vob|mkv|mov)\\??([-\\+=&;%@.\\w_]*)#?(?:[\\w]*)$";
 
     Pattern VEDIO_REGEX_PATTERN = Pattern.compile(VEDIO_REGEX);
 

@@ -194,6 +194,9 @@ public abstract class RegexSupport {
             result.setMatcher(matcher);
             result.setFilename(matcher.group(0));
             fetchFilenameResult(result, matcher);
+            if (result.isHasSuffix()) {
+                result.setFilename(String.format("%s.%s", result.getPrefix(), result.getSuffix()));
+            }
         }
         return result;
     }
@@ -212,7 +215,7 @@ public abstract class RegexSupport {
             result.setRegex(RegexDefine.IMAGE_REGEX);
             result.setPattern(RegexDefine.IMAGE_REGEX_PATTERN);
             result.setMatcher(matcher);
-            result.setFilename(matcher.group(0));
+            result.setFilename(String.format("%s.%s", matcher.group(1), matcher.group(2)));
             result.setHasSuffix(true);
             result.setPrefix(matcher.group(1));
             result.setSuffix(matcher.group(2));
@@ -234,7 +237,7 @@ public abstract class RegexSupport {
             result.setRegex(RegexDefine.AUDIO_REGEX);
             result.setPattern(RegexDefine.AUDIO_REGEX_PATTERN);
             result.setMatcher(matcher);
-            result.setFilename(matcher.group(0));
+            result.setFilename(String.format("%s.%s", matcher.group(1), matcher.group(2)));
             result.setHasSuffix(true);
             result.setPrefix(matcher.group(1));
             result.setSuffix(matcher.group(2));
@@ -256,7 +259,7 @@ public abstract class RegexSupport {
             result.setRegex(RegexDefine.VEDIO_REGEX);
             result.setPattern(RegexDefine.VEDIO_REGEX_PATTERN);
             result.setMatcher(matcher);
-            result.setFilename(matcher.group(0));
+            result.setFilename(String.format("%s.%s", matcher.group(1), matcher.group(2)));
             result.setHasSuffix(true);
             result.setPrefix(matcher.group(1));
             result.setSuffix(matcher.group(2));
