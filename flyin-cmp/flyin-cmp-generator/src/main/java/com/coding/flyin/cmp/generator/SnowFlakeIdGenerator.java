@@ -72,7 +72,7 @@ public class SnowFlakeIdGenerator {
     // 在毫秒内自增序列
     private long sequence = 0L;
 
-    private static SnowFlakeIdGenerator instance = null;
+    private static SnowFlakeIdGenerator instance;
 
     // 默认初始化的实例，给JPA使用
     static {
@@ -85,7 +85,7 @@ public class SnowFlakeIdGenerator {
                 long initWorkerId = Long.parseLong(propWorkerId);
                 instance = new SnowFlakeIdGenerator(initDatacenterId, initWorkerId);
             } catch (NumberFormatException e) {
-                log.error(
+                SnowFlakeIdGenerator.log.error(
                         String.format(
                                 "【SnowFlake】数据中心ID、工作进程ID属性值不合法 snowflake.datacenterId=%s, snowflake.workderId=%s 启用自动获取",
                                 propDatacenterId, propWorkerId),

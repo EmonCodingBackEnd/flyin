@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.coding.flyin.starter.annotation.resolver.AfterTransactionResolver
