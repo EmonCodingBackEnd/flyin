@@ -3,6 +3,7 @@ package com.coding.flyin.cmp.exception;
 import com.coding.flyin.cmp.api.AppResponse;
 import com.coding.flyin.cmp.exception.annotation.DisableGlobalExceptionInterceptor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,14 +31,15 @@ public class GlobalExceptionInterceptor {
             appResponse.setErrorCode(appException.getErrorCode());
             appResponse.setErrorMessage(appException.getErrorMessage());
         } else {
+            String errorMessage = ExceptionUtils.getMessage(e);
             log.error(
                     String.format(
                             "【系统异常】errorCode=%s,errorMessage=%s",
-                            AppStatus.S0001.getErrorCode(), "系统意料之外的异常"),
+                            AppStatus.S0001.getErrorCode(), "系统意料之外的异常:".concat(errorMessage)),
                     e);
             appResponse.setErrorCode(AppStatus.S0001.getErrorCode());
-            appResponse.setErrorMessage("系统意料之外的异常");
-            appResponse.setData(e.getMessage());
+            appResponse.setErrorMessage("系统意料之外的异常:".concat(errorMessage));
+            appResponse.setData(errorMessage);
         }
         return appResponse;
     }
