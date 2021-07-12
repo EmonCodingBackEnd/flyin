@@ -38,11 +38,6 @@
             <artifactId>spring-cloud-starter-gateway</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!-- 引入三方包 end -->
 
         <!-- 引入二方包 beg -->
