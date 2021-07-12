@@ -57,6 +57,14 @@ public abstract class GrayInterceptorHelper {
         return GrayInterceptorHelper.headers.get().getFirst(key);
     }
 
+    public static void setHeader(String key, String value) {
+        Assert.notNull(key, "Only non-null key instances are permitted");
+        if (GrayInterceptorHelper.headers.get() == null) {
+            GrayInterceptorHelper.headers.set(new LinkedMultiValueMap<>());
+        }
+        GrayInterceptorHelper.headers.get().set(key, value);
+    }
+
     public static void addHeader(String key, String value) {
         Assert.notNull(key, "Only non-null key instances are permitted");
         if (GrayInterceptorHelper.headers.get() == null) {
