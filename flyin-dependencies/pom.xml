@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.coding.flyin</groupId>
         <artifactId>flyin</artifactId>
-        <version>0.1.35</version>
+        <version>0.1.36</version>
     </parent>
 
     <artifactId>flyin-dependencies</artifactId>
@@ -443,6 +443,28 @@
             <!-- 定义一方包 end -->
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>
 

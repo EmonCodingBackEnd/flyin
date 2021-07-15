@@ -5,14 +5,16 @@ import com.coding.flyin.cmp.auth.metadata.AppSession;
 import com.coding.flyin.cmp.auth.metadata.annotation.AppCache;
 import com.coding.flyin.cmp.exception.AppException;
 import com.coding.flyin.cmp.exception.AppStatus;
+import com.coding.flyin.core.GlobalConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import java.util.Objects;
 
 @Slf4j
 public class AppCacheArgumentResolver implements HandlerMethodArgumentResolver {
@@ -47,9 +49,30 @@ public class AppCacheArgumentResolver implements HandlerMethodArgumentResolver {
                 throw new AppException(AppStatus.U0340, "登录信息类型不匹配！");
             }
         } else {
-            log.error("【AppCacheArgumentResolver】登录信息丢失或已过期！");
-            if (Objects.requireNonNull(appCache).required()) {
-                throw new AppException(AppStatus.U0230, "登录信息丢失或已过期！");
+            boolean required = appCache != null && appCache.required();
+            Exception exception =
+                    (Exception)
+                            webRequest.getAttribute(
+                                    GlobalConstants.$X_APP_SESSION_EXP,
+                                    RequestAttributes.SCOPE_REQUEST);
+            if (exception != null) {
+                String errorMessage = ExceptionUtils.getMessage(exception);
+                if (exception instanceof AppException) {
+                    errorMessage =
+                            ObjectUtils.nullSafeToString(
+                                    ((AppException) exception).getErrorMessage());
+                }
+                log.error("【AppCacheArgumentResolver】用户信息加载失败！", exception);
+                if (required) {
+                    throw new AppException(
+                            AppStatus.U0225,
+                            "用户信息加载失败！".concat(ObjectUtils.nullSafeToString(errorMessage)));
+                }
+            } else {
+                log.error("【AppCacheArgumentResolver】登录信息丢失或已过期！");
+                if (required) {
+                    throw new AppException(AppStatus.U0230, "登录信息丢失或已过期！");
+                }
             }
             return null;
         }

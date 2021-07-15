@@ -6,7 +6,7 @@
 
     <groupId>com.coding.flyin</groupId>
     <artifactId>flyin</artifactId>
-    <version>0.1.35</version>
+    <version>0.1.36</version>
     <packaging>pom</packaging>
 
     <name>flyin</name>
@@ -61,7 +61,7 @@
     </issueManagement>
 
     <properties>
-        <parentRevision>0.1.35</parentRevision>
+        <parentRevision>0.1.36</parentRevision>
         <dynamic.host>repo.emon.vip</dynamic.host>
         <dynamic.url>http://${dynamic.host}</dynamic.url>
         <dynamic.sslurl>https://${dynamic.host}</dynamic.sslurl>
@@ -71,6 +71,17 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
+
+        <spring-boot.version>2.3.5.RELEASE</spring-boot.version>
+        <!-- <spring-boot.version>2.3.4.RELEASE</spring-boot.version>-->
+        <!-- <spring-boot.version>2.2.6.RELEASE</spring-boot.version>-->
+        <!-- <spring-boot.version>2.2.0.RELEASE</spring-boot.version>-->
+        <!-- <spring-boot.version>2.1.9.RELEASE</spring-boot.version>-->
+        <!-- <spring-boot.version>2.1.4.RELEASE</spring-boot.version>-->
+        <!-- <spring-boot.version>2.0.4.RELEASE</spring-boot.version>-->
 
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <!--<spring-cloud.version>Hoxton.SR8</spring-cloud.version>-->
@@ -308,7 +319,9 @@
         <plugins>
             <!--配置生成源码包-->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
