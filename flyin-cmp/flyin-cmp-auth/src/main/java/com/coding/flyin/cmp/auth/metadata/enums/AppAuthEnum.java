@@ -63,7 +63,7 @@ public enum AppAuthEnum {
      * metadata.scope = "default"<br>
      * fullKey(metadata) -> "prefixKey:10000:permisson:default"<br>
      */
-    private String scopeFullKey(@NonNull AppMetadata metadata) {
+    public String scopeFullKey(@NonNull AppMetadata metadata) {
         return scopeFullKey(metadata.getPrefixKey(), metadata.getScope());
     }
 
@@ -82,7 +82,7 @@ public enum AppAuthEnum {
      * @author emon
      * @since 0.1.30
      */
-    private String scopeFullKey(@NonNull String prefixKey, @NonNull String scope) {
+    public String scopeFullKey(@NonNull String prefixKey, @NonNull String scope) {
         return fullKey(prefixKey).concat(AppBaseRedisKey.getDelimiter()).concat(scope);
     }
 }

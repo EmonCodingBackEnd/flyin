@@ -209,9 +209,9 @@ public enum AppStatus {
      *       <p>正例：调用第三方服务出错是一级、中间件错误是二级、消息服务出错是三级。
      * </ol>
      */
-    private Integer errorCode;
+    private final Integer errorCode;
 
-    private String errorMessage;
+    private final String errorMessage;
 
     AppStatus(int errorCode, String errorMessage) {
         this.errorCode = errorCode;
