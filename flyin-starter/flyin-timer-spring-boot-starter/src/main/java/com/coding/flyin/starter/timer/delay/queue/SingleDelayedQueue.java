@@ -53,7 +53,7 @@ public class SingleDelayedQueue {
      * @since 0.1.0
      */
     public static void put(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
-        log.info("【延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
+        log.info("【单机版延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
         long nanoTime = TimeUnit.NANOSECONDS.convert(timeout, timeUnit);
         // 创建一个任务
         DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, nanoTime);
@@ -66,11 +66,42 @@ public class SingleDelayedQueue {
         DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, 0);
         boolean success = delayedItems.remove(delayedItem);
         if (success) {
-            log.info("【延时任务队列】任务已剔除出延迟队列,taskId={}", delayTask.getTaskId());
+            log.info("【单机版延时任务队列】任务已剔除出延迟队列,taskId={}", delayTask.getTaskId());
         } else {
-            log.info("【延时任务队列】任务不存在于延迟队列,taskId={}", delayTask.getTaskId());
+            log.info("【单机版延时任务队列】任务不存在于延迟队列,taskId={}", delayTask.getTaskId());
         }
         return success;
+    }
+
+    /**
+     * 剔除出指定延时任务，直到全部都被剔除出.
+     *
+     * <p>创建时间: <font style="color:#00FFFF">20210720 15:51</font><br>
+     * [请在此输入功能详述]
+     *
+     * @param delayTask - 指定延时任务
+     * @return java.lang.Integer - 剔除出指定延时任务的数量
+     * @author emon
+     * @since 0.1.38
+     */
+    public static Integer removeUntilNone(DelayTask delayTask) {
+        // 创建一个任务
+        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, 0);
+        int removeCount = 0;
+        if (delayedItems.contains(delayedItem)) {
+            boolean success;
+            do {
+                success = delayedItems.remove(delayedItem);
+                if (success) {
+                    removeCount++;
+                }
+            } while (success);
+        }
+        log.info(
+                "【单机版延时任务队列】任务已剔除出延迟队列,taskId={},removeCount={}",
+                delayTask.getTaskId(),
+                removeCount);
+        return removeCount;
     }
 
     /** 初始化守护线程 */
@@ -92,14 +123,12 @@ public class SingleDelayedQueue {
             DelayedItem item;
             try {
                 item = getDelayedItems().take();
-                if (item != null) {
-                    DelayTask task = item.getTask();
-                    if (task == null) {
-                        continue;
-                    }
-                    log.info("【单机版延时任务队列】任务已提取并加入线程池,taskId={}", task.getTaskId());
-                    delayPoolQueueExecutor.execute(task);
+                DelayTask task = item.getTask();
+                if (task == null) {
+                    continue;
                 }
+                log.info("【单机版延时任务队列】任务已提取并加入线程池,taskId={}", task.getTaskId());
+                delayPoolQueueExecutor.execute(task);
             } catch (InterruptedException e) {
                 log.error("【单机版延时任务队列守护线程】异常", e);
                 break;
