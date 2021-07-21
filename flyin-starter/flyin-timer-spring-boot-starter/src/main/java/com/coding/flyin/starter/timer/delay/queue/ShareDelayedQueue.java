@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ShareDelayedQueue {
 
-    private PooledTimerTaskProperties pooledTimerTaskProperties;
+    private final PooledTimerTaskProperties pooledTimerTaskProperties;
 
-    private ThreadPoolTaskExecutor delayPoolQueueExecutor;
+    private final ThreadPoolTaskExecutor delayPoolQueueExecutor;
 
     public ShareDelayedQueue(
             PooledTimerTaskProperties pooledTimerTaskProperties,
@@ -37,6 +37,30 @@ public class ShareDelayedQueue {
     public static void put(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
         log.info("【分布式延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
         delayedQueue.offer(delayTask, timeout, timeUnit);
+    }
+
+    /**
+     * 加入延时任务到队列，如果任务尚未存在！.
+     *
+     * <p>创建时间: <font style="color:#00FFFF">20210721 14:52</font><br>
+     * [请在此输入功能详述]
+     *
+     * @param delayTask - 待加入的延时任务
+     * @param timeout - 延时的时间
+     * @param timeUnit - 延时的时间单位
+     * @return java.lang.Boolean - true-加入成功；false-已存在，不再加入
+     * @author emon
+     * @since 0.1.39
+     */
+    public static Boolean putIfAbsent(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
+        if (!delayedQueue.contains(delayTask)) {
+            log.info("【分布式延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
+            delayedQueue.offer(delayTask, timeout, timeUnit);
+            return true;
+        } else {
+            log.info("【分布式延时任务队列】任务已存在于延迟队列,忽略再次加入,taskId={}", delayTask.getTaskId());
+            return false;
+        }
     }
 
     public static Boolean remove(DelayTask delayTask) {
