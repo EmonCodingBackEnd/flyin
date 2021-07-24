@@ -2,6 +2,7 @@ package com.coding.flyin.starter.timer.delay.queue;
 
 import com.coding.flyin.starter.timer.PooledTimerTaskProperties;
 import com.coding.flyin.starter.timer.delay.DelayTask;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
@@ -34,7 +35,51 @@ public class ShareDelayedQueue {
     private static RBlockingQueue<DelayTask> blockingFairQueue;
     private static RDelayedQueue<DelayTask> delayedQueue;
 
-    public static void put(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
+    /**
+     * 查看延时队列中总的延时任务数量.
+     *
+     * <p>创建时间: <font style="color:#00FFFF">20210724 17:26</font><br>
+     * [请在此输入功能详述]
+     *
+     * @return java.lang.Integer - 延时任务数量
+     * @author emon
+     * @since 0.1.40
+     */
+    public static Integer size() {
+        return delayedQueue.size();
+    }
+
+    /**
+     * 查看延时队列中指定任务类型的延时任务数量.
+     *
+     * <p>创建时间: <font style="color:#00FFFF">20210724 17:26</font><br>
+     * [请在此输入功能详述]
+     *
+     * @return java.lang.Integer - 指定任务类型的延时任务数量
+     * @author emon
+     * @since 0.1.40
+     */
+    public static <T extends DelayTask> Integer size(@NonNull Class<T> clazz) {
+        return (int)
+                delayedQueue.stream().filter(e -> clazz.isAssignableFrom(e.getClass())).count();
+    }
+
+    /**
+     * 延时任务队列中是否存在指定延时任务.
+     *
+     * <p>创建时间: <font style="color:#00FFFF">20210724 17:49</font><br>
+     * [请在此输入功能详述]
+     *
+     * @param delayTask - 指定延时任务
+     * @return boolean
+     * @author emon
+     * @since 1.0.0
+     */
+    public static boolean exists(@NonNull DelayTask delayTask) {
+        return delayedQueue.contains(delayTask);
+    }
+
+    public static void put(@NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
         log.info("【分布式延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
         delayedQueue.offer(delayTask, timeout, timeUnit);
     }
@@ -52,7 +97,8 @@ public class ShareDelayedQueue {
      * @author emon
      * @since 0.1.39
      */
-    public static Boolean putIfAbsent(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
+    public static Boolean putIfAbsent(
+            @NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
         if (!delayedQueue.contains(delayTask)) {
             log.info("【分布式延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
             delayedQueue.offer(delayTask, timeout, timeUnit);
@@ -63,7 +109,7 @@ public class ShareDelayedQueue {
         }
     }
 
-    public static Boolean remove(DelayTask delayTask) {
+    public static Boolean remove(@NonNull DelayTask delayTask) {
         boolean success = delayedQueue.remove(delayTask);
         if (success) {
             log.info("【分布式延时任务队列】任务已剔除出延迟队列,taskId={}", delayTask.getTaskId());
