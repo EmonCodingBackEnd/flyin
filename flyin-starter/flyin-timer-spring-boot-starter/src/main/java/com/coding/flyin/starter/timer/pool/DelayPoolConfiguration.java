@@ -24,7 +24,7 @@ public class DelayPoolConfiguration {
     @Autowired private RedissonClient redissonClient;
 
     //    @Bean
-    public ThreadPoolTaskExecutor delayPoolQueueExecutor() {
+    private ThreadPoolTaskExecutor delayPoolQueueExecutor() {
         PooledTimerTaskProperties.Delay delay = pooledTimerTaskProperties.getDelay();
         log.info(
                 "【延时任务线程池配置】threadNamePrefix={},corePoolSize={},maxPoolSize={},queueCapacity={},keeyAliveSecond={}",

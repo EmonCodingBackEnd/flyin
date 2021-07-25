@@ -27,7 +27,7 @@ public class AsyncPoolConfiguration {
      * @return -
      */
 //    @Bean
-    public Executor asyncPoolExecutor() {
+    private Executor asyncPoolExecutor() {
         PooledTimerTaskProperties.Async async = pooledTimerTaskProperties.getAsync();
         log.info(
                 "【异步任务线程池配置】threadNamePrefix={},corePoolSize={},maxPoolSize={},queueCapacity={},keeyAliveSecond={}",

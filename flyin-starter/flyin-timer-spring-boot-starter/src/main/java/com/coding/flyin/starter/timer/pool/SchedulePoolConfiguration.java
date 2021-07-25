@@ -25,7 +25,7 @@ public class SchedulePoolConfiguration {
      * @return -
      */
 //    @Bean
-    public Executor schedulePoolExecutor() {
+    private Executor schedulePoolExecutor() {
         PooledTimerTaskProperties.Schedule schedule = pooledTimerTaskProperties.getSchedule();
         log.info(
                 "【定时器线程池配置】threadNamePrefix={},poolSize={},awaitTerminationSeconds={}",
