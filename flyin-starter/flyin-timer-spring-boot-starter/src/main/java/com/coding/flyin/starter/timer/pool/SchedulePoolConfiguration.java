@@ -4,7 +4,6 @@ import com.coding.flyin.starter.timer.PooledTimerTaskProperties;
 import com.coding.flyin.starter.timer.schedule.ScheduleConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +24,7 @@ public class SchedulePoolConfiguration {
      *
      * @return -
      */
-    @Bean
+//    @Bean
     public Executor schedulePoolExecutor() {
         PooledTimerTaskProperties.Schedule schedule = pooledTimerTaskProperties.getSchedule();
         log.info(
@@ -46,7 +45,8 @@ public class SchedulePoolConfiguration {
     @Bean
     @ConditionalOnMissingBean({ScheduleConfig.class})
     public ScheduleConfig scheduleConfig(
-            @Qualifier("schedulePoolExecutor") Executor schedulePoolExecutor) {
+            /*@Qualifier("schedulePoolExecutor") Executor schedulePoolExecutor*/) {
+        Executor schedulePoolExecutor = schedulePoolExecutor();
         return new ScheduleConfig(schedulePoolExecutor);
     }
 }

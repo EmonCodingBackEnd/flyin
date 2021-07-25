@@ -1,166 +1,63 @@
 package com.coding.flyin.starter.timer.delay.queue;
 
-import com.coding.flyin.starter.timer.PooledTimerTaskProperties;
 import com.coding.flyin.starter.timer.delay.DelayTask;
-import com.coding.flyin.starter.timer.delay.DelayedItem;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import javax.annotation.PostConstruct;
-import java.util.concurrent.DelayQueue;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 延时队列守护线程.
- *
- * <p>创建时间: <font style="color:#00FFFF">20180515 14:11</font><br>
- * [请在此输入功能详述]
- *
- * @author Rushing0711
- * @version 1.0.0
- * @since 0.1.0
- */
+/** {@linkplain DelayedQueue 参见接口定义 DelayedQueue} */
 @Slf4j
-public class SingleDelayedQueue {
+public final class SingleDelayedQueue {
 
-    private final PooledTimerTaskProperties pooledTimerTaskProperties;
+    private static AbstractSingleDelayedQueue defaultSingleDelayedQueue;
 
-    private final ThreadPoolTaskExecutor delayPoolQueueExecutor;
-
-    public SingleDelayedQueue(
-            PooledTimerTaskProperties pooledTimerTaskProperties,
-            ThreadPoolTaskExecutor delayPoolQueueExecutor) {
-        this.pooledTimerTaskProperties = pooledTimerTaskProperties;
-        this.delayPoolQueueExecutor = delayPoolQueueExecutor;
+    public SingleDelayedQueue(AbstractSingleDelayedQueue defaultSingleDelayedQueue) {
+        SingleDelayedQueue.defaultSingleDelayedQueue = defaultSingleDelayedQueue;
     }
 
-    /** 创建一个最初为空的新 DelayQueue */
-    private static final DelayQueue<DelayedItem> delayedItems = new DelayQueue<>();
-
-    private DelayQueue<DelayedItem> getDelayedItems() {
-        return delayedItems;
+    /** {@linkplain DelayedQueue#size() 参见接口定义 DelayedQueue#size() }. */
+    public static Integer size() {
+        return defaultSingleDelayedQueue.size();
     }
 
-    /**
-     * 添加任务到延时队列.
-     *
-     * <p>创建时间: <font style="color:#00FFFF">20180515 14:06</font><br>
-     * [请在此输入功能详述]
-     *
-     * @param delayTask - 延时任务，继承Thread类或实现Runnable接口的类
-     * @param timeout - 延时时间，单位毫秒
-     * @author Rushing0711
-     * @since 0.1.0
-     */
-    public static void put(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
-        log.info("【单机版延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
-        long nanoTime = TimeUnit.NANOSECONDS.convert(timeout, timeUnit);
-        // 创建一个任务
-        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, nanoTime);
-        // 阻塞式将任务放在延时的队列中
-        delayedItems.put(delayedItem);
+    /** {@linkplain DelayedQueue#size(Class) 参见接口定义 DelayedQueue#size(Class) }. */
+    public static <T extends DelayTask> Integer size(@NonNull Class<T> clazz) {
+        return defaultSingleDelayedQueue.size(clazz);
+    }
+
+    /** {@linkplain DelayedQueue#exists(DelayTask) 参见接口定义 DelayedQueue#exists(DelayTask) }. */
+    public static boolean exists(@NonNull DelayTask delayTask) {
+        return defaultSingleDelayedQueue.exists(delayTask);
     }
 
     /**
-     * 加入延时任务到队列，如果任务尚未存在！.
-     *
-     * <p>创建时间: <font style="color:#00FFFF">20210721 14:52</font><br>
-     * [请在此输入功能详述]
-     *
-     * @param delayTask - 待加入的延时任务
-     * @param timeout - 延时的时间
-     * @param timeUnit - 延时的时间单位
-     * @return java.lang.Boolean - true-加入成功；false-已存在，不再加入
-     * @author emon
-     * @since 0.1.39
+     * {@linkplain DelayedQueue#put(DelayTask, long, TimeUnit) 参见接口定义 @linkplain
+     * DelayedQueue#put(DelayTask, long, TimeUnit) }.
      */
-    public static Boolean putIfAbsent(DelayTask delayTask, long timeout, TimeUnit timeUnit) {
-        long nanoTime = TimeUnit.NANOSECONDS.convert(timeout, timeUnit);
-        // 创建一个任务
-        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, nanoTime);
-        if (!delayedItems.contains(delayedItem)) {
-            log.info("【单机版延时任务队列】任务已加入延迟队列,taskId={}", delayTask.getTaskId());
-            delayedItems.put(delayedItem);
-            return true;
-        } else {
-            log.info("【单机版延时任务队列】任务已存在于延迟队列,忽略再次加入,taskId={}", delayTask.getTaskId());
-            return false;
-        }
-    }
-
-    public static Boolean remove(DelayTask delayTask) {
-        // 创建一个任务
-        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, 0);
-        boolean success = delayedItems.remove(delayedItem);
-        if (success) {
-            log.info("【单机版延时任务队列】任务已剔除出延迟队列,taskId={}", delayTask.getTaskId());
-        } else {
-            log.info("【单机版延时任务队列】任务不存在于延迟队列,taskId={}", delayTask.getTaskId());
-        }
-        return success;
+    public static void put(@NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
+        defaultSingleDelayedQueue.put(delayTask, timeout, timeUnit);
     }
 
     /**
-     * 剔除出指定延时任务，直到全部都被剔除出.
-     *
-     * <p>创建时间: <font style="color:#00FFFF">20210720 15:51</font><br>
-     * [请在此输入功能详述]
-     *
-     * @param delayTask - 指定延时任务
-     * @return java.lang.Integer - 剔除出指定延时任务的数量
-     * @author emon
-     * @since 0.1.38
+     * {@linkplain DelayedQueue#putIfAbsent(DelayTask, long, TimeUnit) 参见接口定义
+     * DelayedQueue#putIfAbsent(DelayTask, long, TimeUnit) }.
      */
-    public static Integer removeUntilNone(DelayTask delayTask) {
-        // 创建一个任务
-        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, 0);
-        int removeCount = 0;
-        if (delayedItems.contains(delayedItem)) {
-            boolean success;
-            do {
-                success = delayedItems.remove(delayedItem);
-                if (success) {
-                    removeCount++;
-                }
-            } while (success);
-        }
-        log.info(
-                "【单机版延时任务队列】任务已剔除出延迟队列,taskId={},removeCount={}",
-                delayTask.getTaskId(),
-                removeCount);
-        return removeCount;
+    public static Boolean putIfAbsent(
+            @NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
+        return defaultSingleDelayedQueue.putIfAbsent(delayTask, timeout, timeUnit);
     }
 
-    /** 初始化守护线程 */
-    @PostConstruct
-    private void init() {
-        log.info("【初始化单机版延时任务队列守护线程】开始......");
-        Thread daemonThread = new Thread(this::execute);
-        daemonThread.setDaemon(true);
-        daemonThread.setName(
-                pooledTimerTaskProperties.getDelay().getDelayTaskQueueDaemonThreadName());
-        daemonThread.start();
-        log.info("【初始化单机版延时任务队列守护线程】完成......");
+    /** {@linkplain DelayedQueue#remove(DelayTask) 参见接口定义 DelayedQueue#remove(DelayTask) }. */
+    public static Boolean remove(@NonNull DelayTask delayTask) {
+        return defaultSingleDelayedQueue.remove(delayTask);
     }
 
-    private void execute() {
-        log.info("【单机版延时任务队列守护线程】开启,thread={}", Thread.currentThread().getId());
-        while (true) {
-            // 阻塞式获取
-            DelayedItem item;
-            try {
-                item = getDelayedItems().take();
-                DelayTask task = item.getTask();
-                if (task == null) {
-                    continue;
-                }
-                log.info("【单机版延时任务队列】任务已提取并加入线程池,taskId={}", task.getTaskId());
-                delayPoolQueueExecutor.execute(task);
-            } catch (InterruptedException e) {
-                log.error("【单机版延时任务队列守护线程】异常", e);
-                break;
-            }
-        }
-        log.info("【单机版延时任务队列守护线程】关闭,thread={}", Thread.currentThread().getId());
+    /**
+     * {@linkplain DelayedQueue#removeUntilNone(DelayTask) 参见接口定义
+     * DelayedQueue#removeUntilNone(DelayTask) }.
+     */
+    public static Integer removeUntilNone(@NonNull DelayTask delayTask) {
+        return defaultSingleDelayedQueue.removeUntilNone(delayTask);
     }
 }

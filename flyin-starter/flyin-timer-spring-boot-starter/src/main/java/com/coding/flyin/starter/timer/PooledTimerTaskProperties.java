@@ -68,6 +68,8 @@ public class PooledTimerTaskProperties {
         private int awaitTerminationSeconds = 60;
 
         private String delayTaskQueueDaemonThreadName = "DelayTaskQueueDaemonThread";
+
+        private String delayTaskLogPrefix;
     }
 
     @Data

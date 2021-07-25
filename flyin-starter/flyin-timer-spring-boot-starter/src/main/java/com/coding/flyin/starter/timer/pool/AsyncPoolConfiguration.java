@@ -5,7 +5,6 @@ import com.coding.flyin.starter.timer.async.AsyncConfig;
 import com.coding.flyin.starter.timer.async.AsyncMDCTaskDecorator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +26,7 @@ public class AsyncPoolConfiguration {
      *
      * @return -
      */
-    @Bean
+//    @Bean
     public Executor asyncPoolExecutor() {
         PooledTimerTaskProperties.Async async = pooledTimerTaskProperties.getAsync();
         log.info(
@@ -59,7 +58,8 @@ public class AsyncPoolConfiguration {
 
     @Bean
     @ConditionalOnMissingBean({AsyncConfig.class})
-    public AsyncConfig asyncConfig(@Qualifier("asyncPoolExecutor") Executor asyncPoolExecutor) {
+    public AsyncConfig asyncConfig(/*@Qualifier("asyncPoolExecutor") Executor asyncPoolExecutor*/) {
+        Executor asyncPoolExecutor = asyncPoolExecutor();
         // [lm's ps]: 20201030 16:59 禁止 asyncPoolExecutor() 这种方式调用 @Bean 定义的实例，会导致重复生成实例
         // return new AsyncConfig(asyncPoolExecutor());
         return new AsyncConfig(asyncPoolExecutor);

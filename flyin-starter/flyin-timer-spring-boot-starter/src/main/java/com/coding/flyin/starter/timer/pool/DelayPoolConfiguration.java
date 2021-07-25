@@ -1,12 +1,13 @@
 package com.coding.flyin.starter.timer.pool;
 
 import com.coding.flyin.starter.timer.PooledTimerTaskProperties;
+import com.coding.flyin.starter.timer.delay.queue.DefaultShareDelayedQueue;
+import com.coding.flyin.starter.timer.delay.queue.DefaultSingleDelayedQueue;
 import com.coding.flyin.starter.timer.delay.queue.ShareDelayedQueue;
 import com.coding.flyin.starter.timer.delay.queue.SingleDelayedQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,7 @@ public class DelayPoolConfiguration {
 
     @Autowired private RedissonClient redissonClient;
 
-    @Bean
+    //    @Bean
     public ThreadPoolTaskExecutor delayPoolQueueExecutor() {
         PooledTimerTaskProperties.Delay delay = pooledTimerTaskProperties.getDelay();
         log.info(
@@ -53,17 +54,34 @@ public class DelayPoolConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "flyin.timer.delay", name = "standalone", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(
+            prefix = "flyin.timer.delay",
+            name = "standalone",
+            havingValue = "true",
+            matchIfMissing = true)
     public SingleDelayedQueue singleDelayedQueue(
-            @Qualifier("delayPoolQueueExecutor") ThreadPoolTaskExecutor delayPoolQueueExecutor) {
-        return new SingleDelayedQueue(pooledTimerTaskProperties, delayPoolQueueExecutor);
+            /*@Qualifier("delayPoolQueueExecutor") ThreadPoolTaskExecutor delayPoolQueueExecutor*/ ) {
+        ThreadPoolTaskExecutor delayPoolQueueExecutor = delayPoolQueueExecutor();
+        DefaultSingleDelayedQueue delayedQueue =
+                new DefaultSingleDelayedQueue(
+                        pooledTimerTaskProperties.getDelay(), delayPoolQueueExecutor);
+
+        //noinspection InstantiationOfUtilityClass
+        return new SingleDelayedQueue(delayedQueue);
     }
 
     @Bean
     @ConditionalOnMissingBean({SingleDelayedQueue.class})
     public ShareDelayedQueue shareDelayedQueue(
-            @Qualifier("delayPoolQueueExecutor") ThreadPoolTaskExecutor delayPoolQueueExecutor) {
-        return new ShareDelayedQueue(
-                pooledTimerTaskProperties, delayPoolQueueExecutor, redissonClient);
+            /*@Qualifier("delayPoolQueueExecutor") ThreadPoolTaskExecutor delayPoolQueueExecutor*/ ) {
+        ThreadPoolTaskExecutor delayPoolQueueExecutor = delayPoolQueueExecutor();
+        DefaultShareDelayedQueue delayedQueue =
+                new DefaultShareDelayedQueue(
+                        pooledTimerTaskProperties.getDelay(),
+                        delayPoolQueueExecutor,
+                        redissonClient);
+
+        //noinspection InstantiationOfUtilityClass
+        return new ShareDelayedQueue(delayedQueue);
     }
 }
