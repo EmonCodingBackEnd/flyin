@@ -39,6 +39,8 @@ public class SchedulePoolConfiguration {
         scheduler.setWaitForTasksToCompleteOnShutdown(true);
         scheduler.setAwaitTerminationSeconds(schedule.getAwaitTerminationSeconds());
 
+        // 不采用bean时，加上该句解决bug: java.lang.IllegalStateException: ThreadPoolTaskScheduler not initialized
+        scheduler.initialize();
         return scheduler;
     }
 
