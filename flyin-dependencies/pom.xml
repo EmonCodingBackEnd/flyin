@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.coding.flyin</groupId>
         <artifactId>flyin</artifactId>
-        <version>0.1.42</version>
+        <version>0.1.43</version>
     </parent>
 
     <artifactId>flyin-dependencies</artifactId>
@@ -365,6 +365,20 @@
                 <groupId>uk.com.robust-it</groupId>
                 <artifactId>cloning</artifactId>
                 <version>1.9.12</version>
+            </dependency>
+
+            <!--OpenAPI3.0,Swagger3-->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>1.5.10</version>
+            </dependency>
+
+            <!--OpenAPI3.0,Swagger3，网关-->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>3.0.3</version>
             </dependency>
             <!-- 定义三方包 end -->
 

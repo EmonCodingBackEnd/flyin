@@ -2,6 +2,7 @@ package com.coding.flyin.cmp.api.annotation.resolver;
 
 import com.coding.flyin.cmp.api.AppResponse;
 import com.coding.flyin.cmp.api.annotation.IgnoreResponse;
+import com.coding.flyin.cmp.api.annotation.resolver.config.IgnoreResponseConfig;
 import com.coding.flyin.cmp.api.paging.AppPagingResponse;
 import com.coding.flyin.cmp.api.paging.AppPagingStandardResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,12 @@ import java.net.URI;
 @Slf4j
 public class IgnoreResponseResolver implements ResponseBodyAdvice<Object> {
 
+    private final IgnoreResponseConfig ignoreResponseConfig;
+
+    public IgnoreResponseResolver(IgnoreResponseConfig ignoreResponseConfig) {
+        this.ignoreResponseConfig = ignoreResponseConfig;
+    }
+
     @PostConstruct
     public void init() {
         log.info("【全局应答处理】IgnoreResponseResolver has been initialized");
@@ -54,6 +61,12 @@ public class IgnoreResponseResolver implements ResponseBodyAdvice<Object> {
     @SuppressWarnings("all")
     public boolean supports(
             MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+
+        // 如果包不属于管控范围，不需要处理
+        String packageName = returnType.getDeclaringClass().getPackage().getName();
+        if (!ignoreResponseConfig.containsPackage(packageName)) {
+            return false;
+        }
 
         // 如果不是Jackson转换器处理的，不需要处理
         boolean isJacksonConverter =

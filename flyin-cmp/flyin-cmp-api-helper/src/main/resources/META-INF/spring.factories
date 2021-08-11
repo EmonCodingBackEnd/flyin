@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.coding.flyin.cmp.exception.GlobalExceptionInterceptor,\
+com.coding.flyin.cmp.api.annotation.resolver.config.IgnoreResponseConfig,\
 com.coding.flyin.cmp.api.annotation.resolver.IgnoreResponseResolver
