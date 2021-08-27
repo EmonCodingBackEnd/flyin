@@ -5,10 +5,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.springframework.util.Assert;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Http辅助支持类.
@@ -79,12 +76,11 @@ public abstract class HttpSupport {
     public static Map<String, String> buildParams(String params) {
         String[] pms = params.split("&");
         String[][] pmss = new String[pms.length][2];
-        int pos = 0;
+        int pos;
         for (int i = 0; i < pms.length; i++) {
             pos = pms[i].indexOf("=");
             pmss[i][0] = pms[i].substring(0, pos);
             pmss[i][1] = pms[i].substring(pos + 1);
-            pos = 0;
         }
         return buildParams(pmss);
     }
@@ -101,7 +97,7 @@ public abstract class HttpSupport {
      * @since 0.1.0
      */
     public static Map<String, String> buildParams(String[][] params) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new LinkedHashMap<>();
         for (String[] param : params) {
             map.put(param[0], param[1]);
         }
