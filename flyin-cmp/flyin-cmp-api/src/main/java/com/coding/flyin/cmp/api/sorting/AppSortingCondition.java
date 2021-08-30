@@ -1,16 +1,16 @@
 package com.coding.flyin.cmp.api.sorting;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public abstract class AppSortingCondition {
 
-    private List<SortProperty> sortProps;
+    protected List<SortProperty> sortProps;
 
     @Data
     @NoArgsConstructor
