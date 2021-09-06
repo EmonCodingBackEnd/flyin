@@ -282,11 +282,8 @@ public abstract class HttpSyncClient {
                             .build();
             httpRequest.setConfig(requestConfig);
         }
-        if (logInner.isDebugEnabled()) {
-            logInner.debug("【Http】{}请求url={},params=[{}]", httpMethod.name(), uri, param);
-        } else {
-            logInner.info("【Http】{}请求url={}", httpMethod.name(), uri);
-        }
+
+        logInner.info("【Http】{}请求url={},params={}", httpMethod.name(), uri, param);
 
         return execute(client, httpRequest, charset, responseHandler, context, logInner);
     }
@@ -305,7 +302,7 @@ public abstract class HttpSyncClient {
         if (result != null) {
             if (Long.class.isAssignableFrom(result.getClass())
                     || Integer.class.isAssignableFrom(result.getClass())) {
-                logInner.info("【Http】应答内容大小={}", HttpSupport.getNetContentSize((Long) result));
+                logInner.info("【Http】应答内容大小={}", HttpSupport.getNetContentSize((long) result));
             } else {
                 if (logInner.isDebugEnabled()) {
                     logInner.debug(
