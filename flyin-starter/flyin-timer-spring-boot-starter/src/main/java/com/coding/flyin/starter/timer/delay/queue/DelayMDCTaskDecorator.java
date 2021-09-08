@@ -1,6 +1,5 @@
 package com.coding.flyin.starter.timer.delay.queue;
 
-import com.coding.flyin.core.GlobalConstants;
 import com.coding.flyin.starter.timer.delay.DelayTask;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -23,19 +21,19 @@ class DelayMDCTaskDecorator implements DelayTask {
 
     @NonNull private DelayTask target;
 
-    private Map<String, String> MDCEnvironment;
+    private Map<String, String> MDCEnvironment = null;
 
     public DelayMDCTaskDecorator(@NonNull DelayTask target) {
         this.target = target;
 
-        // 在同步线程中：Grab Web thread context
+        // 针对 AbstractShareDelayedQueue，如果引入了MDC会导致contains方法失效，故而忽略掉！
+        /*// 在同步线程中：Grab Web thread context
         Map<String, String> contextMap = MDC.getCopyOfContextMap();
         if (contextMap != null && contextMap.containsKey(GlobalConstants.TRACE_ID)) {
-            // [lm's ps]: 20210908 20:44 为什么不把整个comtextMap放入MDCEnvironment？因为会导致队列的contains判断失效！
             this.MDCEnvironment = new HashMap<>();
             this.MDCEnvironment.put(
                     GlobalConstants.TRACE_ID, contextMap.get(GlobalConstants.TRACE_ID));
-        }
+        }*/
     }
 
     @Override
@@ -52,10 +50,15 @@ class DelayMDCTaskDecorator implements DelayTask {
             }
             target.run();
         } finally {
-            MDC.clear();
+            if (MDCEnvironment != null) {
+                MDC.clear();
+            }
         }
     }
 
+    // 仅针对 AbstractSingleDelayedQueue 根据 taskId 来判断是否同一个延迟任务；对 AbstractShareDelayedQueue
+    // 不起作用！后者使用redis+lua脚本判断
+    // ==================================================华丽的分割线==================================================
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,4 +76,5 @@ class DelayMDCTaskDecorator implements DelayTask {
     public String toString() {
         return "DelayMDCTaskDecorator{" + "target=" + target + '}';
     }
+    // ==================================================华丽的分割线==================================================
 }

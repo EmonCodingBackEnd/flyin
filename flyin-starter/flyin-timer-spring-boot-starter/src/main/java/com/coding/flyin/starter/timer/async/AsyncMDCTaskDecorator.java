@@ -21,7 +21,9 @@ public class AsyncMDCTaskDecorator implements TaskDecorator {
                 }
                 runnable.run();
             } finally {
-                MDC.clear();
+                if (contextMap != null) {
+                    MDC.clear();
+                }
             }
         };
     }
