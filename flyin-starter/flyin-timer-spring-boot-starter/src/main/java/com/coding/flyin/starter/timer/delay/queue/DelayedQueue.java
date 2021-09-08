@@ -58,7 +58,8 @@ public interface DelayedQueue {
      * 添加任务到延时队列.
      *
      * <p>创建时间: <font style="color:#00FFFF">20180515 14:06</font><br>
-     * [请在此输入功能详述]
+     * <span color="green">【提醒】</span>性能比 {@linkplain #putIfAbsent(DelayTask, long, TimeUnit)
+     * putIfAbsent方法} 高！优先推荐！
      *
      * @param delayTask - 延时任务，继承Thread类或实现Runnable接口的类
      * @param timeout - 延时时间，单位毫秒
@@ -71,7 +72,8 @@ public interface DelayedQueue {
      * 加入延时任务到队列，如果任务尚未存在！.
      *
      * <p>创建时间: <font style="color:#00FFFF">20210721 14:52</font><br>
-     * [请在此输入功能详述]
+     * <span color="yellow">【提醒】</span>在可以控制重复添加的情况下，推荐优先使用 {@linkplain #put(DelayTask, long,
+     * TimeUnit) put方法} 性能更高！
      *
      * @param delayTask - 待加入的延时任务
      * @param timeout - 延时的时间
