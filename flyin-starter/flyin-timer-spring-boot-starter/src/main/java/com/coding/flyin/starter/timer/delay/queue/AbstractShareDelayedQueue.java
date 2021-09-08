@@ -50,51 +50,68 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
     @Override
     public <T extends DelayTask> Integer size(@NonNull Class<T> clazz) {
         return (int)
-                delayedQueue.stream().filter(e -> clazz.isAssignableFrom(e.getClass())).count();
+                delayedQueue.stream()
+                        .filter(
+                                e -> {
+                                    if (e == null) {
+                                        return false;
+                                    }
+                                    Class<?> clz = e.getClass();
+                                    if (DelayMDCTaskDecorator.class.isAssignableFrom(clz)) {
+                                        clz = ((DelayMDCTaskDecorator) e).getTarget().getClass();
+                                    }
+                                    return clazz.isAssignableFrom(clz);
+                                })
+                        .count();
     }
 
     @Override
     public boolean exists(@NonNull DelayTask delayTask) {
-        return delayedQueue.contains(delayTask);
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
+        return delayedQueue.contains(decorate);
     }
 
     @Override
     public void put(@NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
-        log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, delayTask.getTaskId());
-        delayedQueue.offer(delayTask, timeout, timeUnit);
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
+        log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, decorate.getTaskId());
+        delayedQueue.offer(decorate, timeout, timeUnit);
     }
 
     @Override
     public Boolean putIfAbsent(
             @NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
-        if (!delayedQueue.contains(delayTask)) {
-            log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, delayTask.getTaskId());
-            delayedQueue.offer(delayTask, timeout, timeUnit);
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
+        if (!delayedQueue.contains(decorate)) {
+            log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, decorate.getTaskId());
+            delayedQueue.offer(decorate, timeout, timeUnit);
             return true;
         } else {
-            log.info("【{}】任务已存在于延迟队列,忽略再次加入,taskId={}", logPrefix, delayTask.getTaskId());
+            log.info("【{}】任务已存在于延迟队列,忽略再次加入,taskId={}", logPrefix, decorate.getTaskId());
             return false;
         }
     }
 
     @Override
     public Boolean remove(@NonNull DelayTask delayTask) {
-        boolean success = delayedQueue.remove(delayTask);
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
+        boolean success = delayedQueue.remove(decorate);
         if (success) {
-            log.info("【{}】任务已剔除出延迟队列,taskId={}", logPrefix, delayTask.getTaskId());
+            log.info("【{}】任务已剔除出延迟队列,taskId={}", logPrefix, decorate.getTaskId());
         } else {
-            log.info("【{}】任务不存在于延迟队列,taskId={}", logPrefix, delayTask.getTaskId());
+            log.info("【{}】任务不存在于延迟队列,taskId={}", logPrefix, decorate.getTaskId());
         }
         return success;
     }
 
     @Override
     public Integer removeUntilNone(DelayTask delayTask) {
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
         int removeCount = 0;
-        if (delayedQueue.contains(delayTask)) {
+        if (delayedQueue.contains(decorate)) {
             boolean success;
             do {
-                success = delayedQueue.remove(delayTask);
+                success = delayedQueue.remove(decorate);
                 if (success) {
                     removeCount++;
                 }
@@ -103,7 +120,7 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
         log.info(
                 "【{}】任务已剔除出延迟队列,taskId={},removeCount={}",
                 logPrefix,
-                delayTask.getTaskId(),
+                decorate.getTaskId(),
                 removeCount);
         return removeCount;
     }

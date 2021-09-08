@@ -7,7 +7,7 @@
     <parent>
         <artifactId>flyin-starter</artifactId>
         <groupId>com.coding.flyin</groupId>
-        <version>0.1.50</version>
+        <version>0.1.51</version>
     </parent>
 
     <artifactId>flyin-timer-spring-boot-starter</artifactId>
@@ -30,6 +30,10 @@
         <!-- 引入二方包 end -->
 
         <!-- 引入一方包 beg -->
+        <dependency>
+            <groupId>com.coding.flyin</groupId>
+            <artifactId>flyin-core</artifactId>
+        </dependency>
         <!-- 引入一方包 end -->
     </dependencies>
 

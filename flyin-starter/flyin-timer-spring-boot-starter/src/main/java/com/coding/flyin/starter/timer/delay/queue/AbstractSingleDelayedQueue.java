@@ -59,54 +59,76 @@ public abstract class AbstractSingleDelayedQueue implements DelayedQueue {
     @Override
     public <T extends DelayTask> Integer size(@NonNull Class<T> clazz) {
         return (int)
-                delayedItems.stream().filter(e -> clazz.isAssignableFrom(e.getClass())).count();
+                delayedItems.stream()
+                        .filter(
+                                e -> {
+                                    DelayTask delayTask = e.getTask();
+                                    if (delayTask == null) {
+                                        return false;
+                                    }
+                                    Class<?> clz = delayTask.getClass();
+                                    if (DelayMDCTaskDecorator.class.isAssignableFrom(clz)) {
+                                        clz =
+                                                ((DelayMDCTaskDecorator) delayTask)
+                                                        .getTarget()
+                                                        .getClass();
+                                    }
+                                    return clazz.isAssignableFrom(clz);
+                                })
+                        .count();
     }
 
     @Override
     public boolean exists(@NonNull DelayTask delayTask) {
-        //noinspection SuspiciousMethodCalls
-        return delayedItems.contains(delayTask);
+        // 创建一个任务
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
+        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(decorate, 1);
+        return delayedItems.contains(delayedItem);
     }
 
     public void put(@NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
-        log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, delayTask.getTaskId());
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
+        log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, decorate.getTaskId());
         long nanoTime = TimeUnit.NANOSECONDS.convert(timeout, timeUnit);
         // 创建一个任务
-        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, nanoTime);
+        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(decorate, nanoTime);
         // 阻塞式将任务放在延时的队列中
         delayedItems.put(delayedItem);
     }
 
     public Boolean putIfAbsent(
             @NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
         long nanoTime = TimeUnit.NANOSECONDS.convert(timeout, timeUnit);
         // 创建一个任务
-        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, nanoTime);
+        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(decorate, nanoTime);
         if (!delayedItems.contains(delayedItem)) {
-            log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, delayTask.getTaskId());
+            log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, decorate.getTaskId());
             delayedItems.put(delayedItem);
             return true;
         } else {
-            log.info("【{}】任务已存在于延迟队列,忽略再次加入,taskId={}", logPrefix, delayTask.getTaskId());
+            log.info("【{}】任务已存在于延迟队列,忽略再次加入,taskId={}", logPrefix, decorate.getTaskId());
             return false;
         }
     }
 
     public Boolean remove(@NonNull DelayTask delayTask) {
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
         // 创建一个任务
-        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, 0);
+        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(decorate, 0);
         boolean success = delayedItems.remove(delayedItem);
         if (success) {
-            log.info("【{}】任务已剔除出延迟队列,taskId={}", logPrefix, delayTask.getTaskId());
+            log.info("【{}】任务已剔除出延迟队列,taskId={}", logPrefix, decorate.getTaskId());
         } else {
-            log.info("【{}】任务不存在于延迟队列,taskId={}", logPrefix, delayTask.getTaskId());
+            log.info("【{}】任务不存在于延迟队列,taskId={}", logPrefix, decorate.getTaskId());
         }
         return success;
     }
 
     public Integer removeUntilNone(@NonNull DelayTask delayTask) {
+        DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
         // 创建一个任务
-        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(delayTask, 0);
+        DelayedItem<DelayTask> delayedItem = new DelayedItem<>(decorate, 0);
         int removeCount = 0;
         if (delayedItems.contains(delayedItem)) {
             boolean success;
@@ -120,7 +142,7 @@ public abstract class AbstractSingleDelayedQueue implements DelayedQueue {
         log.info(
                 "【{}】任务已剔除出延迟队列,taskId={},removeCount={}",
                 logPrefix,
-                delayTask.getTaskId(),
+                decorate.getTaskId(),
                 removeCount);
         return removeCount;
     }
