@@ -38,7 +38,7 @@ public class GlobalExceptionInterceptor {
                             AppStatus.S0001.getErrorCode(), "系统意料之外的异常:".concat(errorMessage)),
                     e);
             appResponse.setErrorCode(AppStatus.S0001.getErrorCode());
-            appResponse.setErrorMessage("系统意料之外的异常:".concat(errorMessage));
+            appResponse.setErrorMessage("服务器开小差了，请稍后再试！");
             appResponse.setData(errorMessage);
         }
         return appResponse;
