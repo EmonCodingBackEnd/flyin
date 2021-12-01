@@ -5,7 +5,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.springframework.util.Assert;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Http辅助支持类.
@@ -79,8 +82,12 @@ public abstract class HttpSupport {
         int pos;
         for (int i = 0; i < pms.length; i++) {
             pos = pms[i].indexOf("=");
-            pmss[i][0] = pms[i].substring(0, pos);
-            pmss[i][1] = pms[i].substring(pos + 1);
+            // [lm's ps]: 20211201 15:19 如果url包含损坏的key，没有对应的value，忽略该参数，比如：
+            // https://mp.weixin.qq.com/s?__biz=Mzg5MDYwNTE0OA==&mid=2247485561&idx=2&sn=a84e927bdf02dd887115130bbabb1dbb&chksm
+            if (pos != -1) {
+                pmss[i][0] = pms[i].substring(0, pos);
+                pmss[i][1] = pms[i].substring(pos + 1);
+            }
         }
         return buildParams(pmss);
     }
