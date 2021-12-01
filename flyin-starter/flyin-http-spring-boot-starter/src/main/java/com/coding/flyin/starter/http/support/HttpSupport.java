@@ -87,6 +87,9 @@ public abstract class HttpSupport {
             if (pos != -1) {
                 pmss[i][0] = pms[i].substring(0, pos);
                 pmss[i][1] = pms[i].substring(pos + 1);
+            } else {
+                pmss[i][0] = pms[i];
+                pmss[i][1] = "";
             }
         }
         return buildParams(pmss);
