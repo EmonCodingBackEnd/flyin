@@ -40,7 +40,7 @@ public class AppPagingResponse<T> extends AppResponse<T> {
      *     public class DemoResponse extends AppPagingResponse&lt;AppPagingData&gt; {}<br/>
      *     接口应答时：<br/>
      *     如果有附加数据：<br/>
-     *     AppPagingData&lt;T, E&gt; pagingData = new AppPagingData<>(pagingProp, T, List&lt;E&gt;);<br/>
+     *     AppPagingData&lt;O, E&gt; pagingData = new AppPagingData<>(pagingProp, O, List&lt;E&gt;);<br/>
      *     如果没有附加数据：
      *     AppPagingData&lt;Object, E&gt; pagingData = new AppPagingData<>(pagingProp, List&lt;E&gt;);<br/>
      *     DemoResponse response = new DemoResponse();<br/>

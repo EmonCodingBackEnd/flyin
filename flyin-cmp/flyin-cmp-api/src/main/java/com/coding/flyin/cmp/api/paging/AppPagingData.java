@@ -22,14 +22,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @JsonPropertyOrder({"paging", "extraData", "results"})
-public final class AppPagingData<T, E> implements Serializable {
+public final class AppPagingData<O, E> implements Serializable {
     private static final long serialVersionUID = -2205716652505827942L;
 
     /** 分页属性信息. */
     protected PagingProp paging;
 
     /** 分页接口返回的附加信息. */
-    protected T extraData;
+    protected O extraData;
 
     /** 分页接口返回的列表数据. */
     protected List<E> results;
@@ -42,7 +42,7 @@ public final class AppPagingData<T, E> implements Serializable {
         this.results = results;
     }
 
-    public AppPagingData(PagingProp paging, T extraData, List<E> results) {
+    public AppPagingData(PagingProp paging, O extraData, List<E> results) {
         if (paging != null) {
             paging.validateNoisy();
         }

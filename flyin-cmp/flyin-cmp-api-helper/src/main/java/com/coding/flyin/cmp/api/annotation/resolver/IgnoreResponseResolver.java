@@ -3,6 +3,7 @@ package com.coding.flyin.cmp.api.annotation.resolver;
 import com.coding.flyin.cmp.api.AppResponse;
 import com.coding.flyin.cmp.api.annotation.IgnoreResponse;
 import com.coding.flyin.cmp.api.annotation.resolver.config.IgnoreResponseConfig;
+import com.coding.flyin.cmp.api.paging.AppPagingDefaultResponse;
 import com.coding.flyin.cmp.api.paging.AppPagingResponse;
 import com.coding.flyin.cmp.api.paging.AppPagingStandardResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -129,6 +130,9 @@ public class IgnoreResponseResolver implements ResponseBodyAdvice<Object> {
             response = AppPagingStandardResponse.getDefaultResponse();
             BeanUtils.copyProperties(oriObject, response);
             ((AppPagingStandardResponse) response).setPaging(null);
+        } else if (oriObject instanceof AppPagingDefaultResponse) {
+            response = AppPagingDefaultResponse.getDefaultResponse();
+            BeanUtils.copyProperties(oriObject, response);
         } else if (oriObject instanceof AppPagingResponse) {
             response = AppPagingResponse.getDefaultResponse();
             BeanUtils.copyProperties(oriObject, response);
