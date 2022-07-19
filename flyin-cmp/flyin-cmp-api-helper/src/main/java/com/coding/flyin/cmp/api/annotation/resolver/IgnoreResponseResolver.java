@@ -88,7 +88,7 @@ public class IgnoreResponseResolver implements ResponseBodyAdvice<Object> {
             return false;
         }
 
-        // 对相应进行处理，执行 beforeBodyWrite 方法
+        // 对响应进行处理，执行 beforeBodyWrite 方法
         return true;
     }
 
