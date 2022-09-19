@@ -41,23 +41,23 @@ public interface AppBaseRedisKey {
     }
 
     /**
-     * 实现该接口的枚举可以在调用该方法.
+     * 实现该接口的枚举可以在内部调用该方法.
      *
      * <p>创建时间: <font style="color:#00FFFF">20190327 19:10</font><br>
-     * 比如： endWithColon = true, prefix:keyPart1:keyPart2......:<br>
-     * 比如： endWithColon = false, prefix:keyPart1:keyPart2......:keyVar
+     * 比如： endWithDelimiter = true, prefix:keyPart1:keyPart2......:<br>
+     * 比如： endWithDelimiter = false, prefix:keyPart1:keyPart2......:keyVar
      *
-     * @param endWithColon - 是否以冒号结尾
+     * @param endWithDelimiter - 是否以分隔符结尾
      * @param keyParts - 组成RedisKey的元素集合，不包含前缀，前缀是自动添加的
      * @return java.lang.String
      * @author Rushing0711
      * @since 0.1.0
      */
-    default String combineKeyParts(boolean endWithColon, String... keyParts) {
+    default String combineKeyParts(boolean endWithDelimiter, String... keyParts) {
         List<Object> keyList = new ArrayList<>();
         keyList.add(getPrefix());
         keyList.addAll(Arrays.asList(keyParts));
-        if (endWithColon) {
+        if (endWithDelimiter) {
             keyList.add("");
         }
         return StringUtils.collectionToDelimitedString(keyList, getDelimiter());
