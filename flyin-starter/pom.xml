@@ -21,6 +21,7 @@
         <module>flyin-ftp-spring-boot-starter</module>
         <module>flyin-http-spring-boot-starter</module>
         <module>flyin-timer-spring-boot-starter</module>
+        <module>flyin-identifier-spring-boot-starter</module>
         <module>flyin-annotation-executor-spring-boot-starter</module>
     </modules>
 

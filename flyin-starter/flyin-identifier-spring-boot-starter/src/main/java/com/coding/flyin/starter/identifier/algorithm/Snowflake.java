@@ -1,4 +1,4 @@
-package com.coding.flyin.cmp.generator;
+package com.coding.flyin.starter.identifier.algorithm;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  *          System.out.println(~(-1L<<41));<br>
  *          System.out.println((1L<<41) -1);<br>
  *          </code>
- * <li>第三部分：10位的工作机器位，可以部署在1024(2^10=1024)个节点，包括5位datacenterId（数据中心ID）和5位workerId（工作进程ID）<br>
+ * <li>第三部分：10位的工作机器位，可以部署在1024(2^10=1024)个节点，包括5位dataCenterId（数据中心ID）和5位workerId（工作进程ID）<br>
  * <li>第四部分：12位序列，毫秒内的计数，12位的计数顺序号支持每个节点每毫秒（相同时间戳和工作机器位）产生4096个ID序号
  * </ul>
  *
@@ -39,25 +39,25 @@ import lombok.extern.slf4j.Slf4j;
  * @since 0.1.0
  */
 @Slf4j
-public class SnowFlakeIdGenerator {
+public class Snowflake {
 
     // 获取20190227对应的毫秒值作为基准，按照69年的计算，可以使用到2088年。对于一个系统而言，该值指定后不可变动。
     private final long twepoch = 1551196800207L;
 
     // 数据中心ID的位数
-    private final long datacenterIdBits = 5L;
+    private final long dataCenterIdBits = 5L;
     // 工作进程ID的位数
     private final long workerIdBits = 5L;
     // 毫秒内自增序列的位数
     private final long sequenceBits = 12L;
 
     // 数据中心ID的最大值
-    private final long maxDatacenterId = ~(-1L << datacenterIdBits);
+    private final long maxDatacenterId = ~(-1L << dataCenterIdBits);
     // 工作进程ID的最大值
     private final long maxWorkerId = ~(-1L << workerIdBits);
 
     // 数据中心ID掩码
-    private final long datacenterIdMask = ~(-1L << datacenterIdBits);
+    private final long dataCenterIdMask = ~(-1L << dataCenterIdBits);
     // 工作进程ID掩码
     private final long workerIdMask = ~(-1L << workerIdBits);
     // 序列掩码
@@ -66,25 +66,25 @@ public class SnowFlakeIdGenerator {
     // 在long的64位二进制中，工作进程ID需要上档的位数
     private final long workerIdShift = sequenceBits;
     // 在long的64位二进制中，数据中心ID需要上档的位数
-    private final long datacenterIdShift = sequenceBits + workerIdBits;
+    private final long dataCenterIdShift = sequenceBits + workerIdBits;
     // 在long的64位二进制中，时间戳ID需要上档的位数
-    private final long timestampShift = sequenceBits + workerIdBits + datacenterIdBits;
+    private final long timestampShift = sequenceBits + workerIdBits + dataCenterIdBits;
 
     // 上次生成ID时的时间戳
     private long lastTimestamp = -1L;
     // 当前服务的数据中心ID
-    private long datacenterId;
+    private long dataCenterId;
     // 当前服务的工作进程ID
     private long workerId;
     // 在毫秒内自增序列
     private long sequence = 0L;
 
-    private volatile static SnowFlakeIdGenerator instance;
+    private volatile static Snowflake instance = null;
 
     // 批量生成ID时，最大的批次大小；原则上，不能让一次生成ID等待待久，这里设置10个序列的掩码时间，理论上10ms
     private final long MAX_BATCH_SIZE = (sequenceMask + 1) * 10;
 
-    // 默认初始化的实例，给JPA使用
+    // 初始化
     /*static {
         String propDatacenterId = System.getProperty("snowflake.datacenterId");
         String propWorkerId = System.getProperty("snowflake.workerId");
@@ -93,21 +93,21 @@ public class SnowFlakeIdGenerator {
             try {
                 long initDatacenterId = Long.parseLong(propDatacenterId);
                 long initWorkerId = Long.parseLong(propWorkerId);
-                instance = new SnowFlakeIdGenerator(initDatacenterId, initWorkerId);
+                instance = new Snowflake(initDatacenterId, initWorkerId);
             } catch (NumberFormatException e) {
-                SnowFlakeIdGenerator.log.error(String.format(
-                    "【SnowFlake】数据中心ID、工作进程ID属性值不合法 snowflake.datacenterId=%s, snowflake.workderId=%s 启用自动获取",
+                Snowflake.log.error(String.format(
+                    "【Snowflake】数据中心ID、工作进程ID属性值不合法 snowflake.dataCenterId=%s, snowflake.workerId=%s 启用自动获取",
                     propDatacenterId, propWorkerId), e);
-                instance = new SnowFlakeIdGenerator();
+                instance = new Snowflake();
             }
         } else {
-            instance = new SnowFlakeIdGenerator();
+            instance = new Snowflake();
         }
     }*/
 
-    public static SnowFlakeIdGenerator getInstance() {
+    public static Snowflake getInstance() {
         if (instance == null) {
-            synchronized (SnowFlakeIdGenerator.class) {
+            synchronized (Snowflake.class) {
                 String propDatacenterId = System.getProperty("snowflake.datacenterId");
                 String propWorkerId = System.getProperty("snowflake.workerId");
                 // 如果存在启动参数配置
@@ -115,25 +115,67 @@ public class SnowFlakeIdGenerator {
                     try {
                         long initDatacenterId = Long.parseLong(propDatacenterId);
                         long initWorkerId = Long.parseLong(propWorkerId);
-                        instance = new SnowFlakeIdGenerator(initDatacenterId, initWorkerId);
+                        instance = new Snowflake(initDatacenterId, initWorkerId);
                     } catch (NumberFormatException e) {
-                        SnowFlakeIdGenerator.log.error(String.format(
+                        Snowflake.log.error(String.format(
                             "【Snowflake】数据中心ID、工作进程ID属性值不合法 snowflake.dataCenterId=%s, snowflake.workerId=%s 启用自动获取",
                             propDatacenterId, propWorkerId), e);
-                        instance = new SnowFlakeIdGenerator();
+                        instance = new Snowflake();
                     }
                 } else {
-                    instance = new SnowFlakeIdGenerator();
+                    instance = new Snowflake();
                 }
             }
         }
         return instance;
     }
 
+    public static Snowflake createInstance(long dataCenterId, long workerId) {
+        log.info("【Snowflake】enable parameter transfer mode, dataCenterId={}, workerId={}", dataCenterId, workerId);
+        Snowflake snowflake = new Snowflake(dataCenterId, workerId);
+        if (instance != null) {
+            String info =
+                String.format("pre instance(dataCenterId=%s,workerId=%s), now instance(dataCenterId=%s,workerId=%s)",
+                    instance.dataCenterId, instance.workerId, snowflake.dataCenterId, snowflake.workerId);
+            log.warn("【Snowflake】found snowflake inited, override by parameter transfer mode! " + info);
+        }
+        instance = snowflake;
+
+        return instance;
+    }
+
+    private Snowflake() {
+        long dataCenterId = getDatacenterId(maxDatacenterId);
+        long workerId = getWorkerId(this.dataCenterId, maxWorkerId);
+        log.info(
+            "【Snowflake】generator starting. timestamp shift {}, datacenter id bits {}, worker id bits {}, sequence bits {}, dataCenterId={}, workerId={}",
+            timestampShift, dataCenterIdBits, workerIdBits, sequenceBits, dataCenterId, workerId);
+
+        this.dataCenterId = dataCenterId;
+        this.workerId = workerId;
+    }
+
+    private Snowflake(long dataCenterId, long workerId) {
+        if (dataCenterId > maxDatacenterId || dataCenterId < 0) {
+            throw new RuntimeException(
+                String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
+        }
+        if (workerId > maxWorkerId || workerId < 0) {
+            throw new RuntimeException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
+        }
+        log.info(
+            "【Snowflake】generator starting. timestamp shift {}, datacenter id bits {}, worker id bits {}, sequence bits {}, dataCenterId={}, workerId={}",
+            timestampShift, dataCenterIdBits, workerIdBits, sequenceBits, dataCenterId, workerId);
+
+        this.dataCenterId = dataCenterId;
+        this.workerId = workerId;
+
+    }
+
     public synchronized long nextId() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
-            log.error("【SnowFlake】clock is moving backwords. Rejecting requests until {}.", lastTimestamp);
+            log.error("【Snowflake】clock is moving backwords. Rejecting requests until {}.", lastTimestamp);
             throw new RuntimeException(String.format(
                 "Clock moved backwords. Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
         }
@@ -146,7 +188,7 @@ public class SnowFlakeIdGenerator {
             sequence = 0L;
         }
         lastTimestamp = timestamp;
-        return ((timestamp - twepoch) << timestampShift) | (datacenterId << datacenterIdShift)
+        return ((timestamp - twepoch) << timestampShift) | (dataCenterId << dataCenterIdShift)
             | (workerId << workerIdShift) | sequence;
     }
 
@@ -168,58 +210,31 @@ public class SnowFlakeIdGenerator {
         return ids;
     }
 
-    // 手工初始化的给MyBatisPlus
-    SnowFlakeIdGenerator() {
-        long dataCenterId = getDatacenterId(maxDatacenterId);
-        long workerId = getWorkerId(this.datacenterId, maxWorkerId);
-        log.info(
-            "【SnowFlake】generator starting. timestamp shift {}, datacenter id bits {}, worker id bits {}, sequence bits {}, datacenterId={}, workerId={}",
-            timestampShift, datacenterIdBits, workerIdBits, sequenceBits, datacenterId, workerId);
-        this.datacenterId = dataCenterId;
-        this.workerId = workerId;
-    }
-
-    // 手工初始化的给MyBatisPlus
-    SnowFlakeIdGenerator(long datacenterId, long workerId) {
-        if (datacenterId > maxDatacenterId || datacenterId < 0) {
-            throw new RuntimeException(
-                String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
-        }
-        if (workerId > maxWorkerId || workerId < 0) {
-            throw new RuntimeException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
-        }
-        log.info(
-            "【SnowFlake】generator starting. timestamp shift {}, datacenter id bits {}, worker id bits {}, sequence bits {}, datacenterId={}, workerId={}",
-            timestampShift, datacenterIdBits, workerIdBits, sequenceBits, datacenterId, workerId);
-        this.datacenterId = datacenterId;
-        this.workerId = workerId;
-    }
-
-    protected long getDatacenterId(long maxDatacenterId) {
-        long datacenterId = 0L;
+    protected long getDatacenterId(long maxDataCenterId) {
+        long dataCenterId = 0L;
         try {
             InetAddress ip = InetAddress.getLocalHost();
             NetworkInterface network = NetworkInterface.getByInetAddress(ip);
             if (network == null) {
-                datacenterId = 1L;
+                dataCenterId = 1L;
             } else {
                 byte[] mac = network.getHardwareAddress();
                 // TODO: 2019/2/27 为什么获取mac地址的低16位运算后作为数据中心ID？
-                datacenterId =
+                dataCenterId =
                     ((0x000000FF & (long)mac[mac.length - 1]) | (0x0000FF00 & (((long)mac[mac.length - 2]) << 8))) >> 6;
-                datacenterId = datacenterId % (maxDatacenterId + 1);
+                dataCenterId = dataCenterId % (maxDataCenterId + 1);
             }
         } catch (UnknownHostException | SocketException e) {
-            log.error("【SnowFlake】获取数据中心ID异常，使用默认值[datacenterId=0L]", e);
+            log.error("【Snowflake】获取数据中心ID异常，使用默认值[dataCenterId=0L]", e);
         }
 
-        return datacenterId;
+        return dataCenterId;
     }
 
-    protected long getWorkerId(long datacenterId, long maxWorkerId) {
+    protected long getWorkerId(long dataCenterId, long maxWorkerId) {
         long workerId;
         StringBuilder pid = new StringBuilder();
-        pid.append(datacenterId);
+        pid.append(dataCenterId);
         String name = ManagementFactory.getRuntimeMXBean().getName();
         if (name != null && !"".equals(name)) {
             // GET jvmPid
@@ -244,6 +259,11 @@ public class SnowFlakeIdGenerator {
     }
 
     public static void main(String[] args) {
+        Snowflake instance2 = Snowflake.getInstance();
+        Snowflake instance1 = Snowflake.createInstance(1, 1);
+        System.out.println(instance1 == instance2); // false
+        System.out.println(instance1 == Snowflake.getInstance()); // true
+
         long start = System.currentTimeMillis();
         for (int i = 0; i < 10000000; i++) {
             long now = System.currentTimeMillis();
@@ -252,7 +272,7 @@ public class SnowFlakeIdGenerator {
                 log.info("统计1秒执行次数:{}, 实际耗时:{}ms", i, diff);
                 break;
             }
-            SnowFlakeIdGenerator.getInstance().nextId();
+            Snowflake.getInstance().nextId();
         }
     }
 }

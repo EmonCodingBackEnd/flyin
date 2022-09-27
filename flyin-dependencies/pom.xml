@@ -81,7 +81,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.74</version>
+                <version>1.2.83</version>
             </dependency>
             <!--时间类的引用-->
             <dependency>
@@ -386,6 +386,22 @@
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>3.0.3</version>
             </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.2.9</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.9</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>5.4.24.Final</version>
+            </dependency>
             <!-- 定义三方包 end -->
 
             <!-- 定义二方包 beg -->
@@ -465,6 +481,11 @@
             <dependency>
                 <groupId>com.coding.flyin</groupId>
                 <artifactId>flyin-annotation-executor-spring-boot-starter</artifactId>
+                <version>${parentRevision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coding.flyin</groupId>
+                <artifactId>flyin-identifier-spring-boot-starter</artifactId>
                 <version>${parentRevision}</version>
             </dependency>
             <!-- 定义一方包 end -->

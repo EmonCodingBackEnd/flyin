@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>flyin-cmp-generator</artifactId>
+    <name>flyin-cmp-generator</name>
 
     <dependencies>
         <!-- 引入三方包 beg -->
@@ -43,6 +44,5 @@
         <!-- 引入一方包 end -->
     </dependencies>
 
-    <name>flyin-cmp-generator</name>
 
 </project>
