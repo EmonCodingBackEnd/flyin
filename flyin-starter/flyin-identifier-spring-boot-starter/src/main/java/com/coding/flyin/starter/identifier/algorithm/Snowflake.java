@@ -193,7 +193,7 @@ public class Snowflake {
     }
 
     /**
-     * 最大批量数：10个序列的掩码时间，(sequenceMask + 1) * 10 = 40960个
+     * 最大批量数：10个序列的掩码时间，(sequenceMask(4095) + 1) * 10 = 40960个
      * 
      * @param size - 批量数
      * @return - 批量ID
