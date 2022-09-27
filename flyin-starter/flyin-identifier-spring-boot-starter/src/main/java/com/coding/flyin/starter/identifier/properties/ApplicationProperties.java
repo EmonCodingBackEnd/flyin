@@ -93,9 +93,9 @@ public class ApplicationProperties {
     public static class DurableExtend {
 
         /**
-         * 节点持久化时，持久化节点的空闲时间，超过该时间被认为是无效节点，默认3600秒
+         * 节点持久化时，持久化节点的空闲时间，超过该时间被认为是无效节点，默认3600*24=86400秒
          */
-        private int nodeIdleToInvalidSeconds = 3600;
+        private int nodeIdleToInvalidSeconds = 3600 * 24;
 
         public void setNodeIdleToInvalidSeconds(int nodeIdleToInvalidSeconds) {
             if (nodeIdleToInvalidSeconds > 0) {
