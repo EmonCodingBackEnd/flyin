@@ -6,10 +6,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.coding.flyin.starter.identifier.properties.ApplicationProperties;
-import com.coding.flyin.starter.identifier.properties.ZookeeperProperties;
 import com.coding.flyin.starter.identifier.generator.IdentifierGenerator;
 import com.coding.flyin.starter.identifier.generator.SnowflakeGenerator;
+import com.coding.flyin.starter.identifier.properties.ApplicationProperties;
+import com.coding.flyin.starter.identifier.properties.ZookeeperProperties;
 import com.coding.flyin.starter.identifier.register.zookeeper.ZookeeperMachineRegister;
 import com.coding.flyin.starter.identifier.registry.zookeeper.ZookeeperRegistryCenter;
 
@@ -28,11 +28,16 @@ public class IdentifierAutoConfiguration {
     private ApplicationProperties applicationProperties;
 
     @Bean
-    public IdentifierGenerator<Long> identifierGenerator() {
+    public SnowflakeGenerator snowflakeGenerator() {
         ZookeeperRegistryCenter registryCenter = new ZookeeperRegistryCenter(zookeeperProperties);
         ZookeeperMachineRegister workerRegister = new ZookeeperMachineRegister(registryCenter, applicationProperties);
         SnowflakeGenerator generator = new SnowflakeGenerator(workerRegister);
         generator.init();
         return generator;
+    }
+
+    @Bean
+    public IdentifierGenerator<Long> identifierGenerator() {
+        return snowflakeGenerator();
     }
 }

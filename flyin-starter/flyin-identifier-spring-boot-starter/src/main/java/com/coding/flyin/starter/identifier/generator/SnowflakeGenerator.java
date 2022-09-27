@@ -101,7 +101,7 @@ public class SnowflakeGenerator implements IdentifierGenerator<Long>, GeneratorC
 
     @Override
     public void close() throws IOException {
-        // 关闭，先重置状态(避免ZK删除 workerId，其他机器抢注，会导致workerID 重新生成的BUG)
+        // 关闭，先重置状态(避免非持久化状态下，ZK删除 machineId，其他机器抢注，会导致 machineId 重新生成的BUG)
         reset();
         register.logout();
     }
