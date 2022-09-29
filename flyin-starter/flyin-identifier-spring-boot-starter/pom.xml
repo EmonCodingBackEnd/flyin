@@ -87,6 +87,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--<dependency>
+            <groupId>com.imadcn.framework</groupId>
+            <artifactId>idworker</artifactId>
+            <version>1.5.0</version>
+        </dependency>-->
         <!-- 引入三方包 end -->
 
         <!-- 引入二方包 beg -->
