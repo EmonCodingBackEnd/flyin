@@ -5,29 +5,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.coding.flyin</groupId>
         <artifactId>flyin-starter</artifactId>
+        <groupId>com.coding.flyin</groupId>
         <version>0.1.59</version>
     </parent>
 
-    <artifactId>flyin-ftp-spring-boot-starter</artifactId>
-
-    <name>flyin-ftp-spring-boot-starter</name>
+    <artifactId>fly-log-access-spring-boot-starter</artifactId>
+    <name>flyin-log-access-spring-boot-starter</name>
 
     <dependencies>
         <!-- 引入三方包 beg -->
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>commons-net</groupId>
-            <artifactId>commons-net</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
+            <artifactId>spring-webmvc</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- 引入三方包 end -->
 
@@ -37,12 +33,10 @@
         <!-- 引入一方包 beg -->
         <dependency>
             <groupId>com.coding.flyin</groupId>
-            <artifactId>flyin-cmp-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.coding.flyin</groupId>
-            <artifactId>flyin-util</artifactId>
+            <artifactId>flyin-core</artifactId>
         </dependency>
         <!-- 引入一方包 end -->
     </dependencies>
+
+
 </project>

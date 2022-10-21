@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.coding.flyin</groupId>
         <artifactId>flyin-starter</artifactId>
-        <version>0.1.58</version>
+        <version>0.1.59</version>
     </parent>
 
     <artifactId>flyin-annotation-executor-spring-boot-starter</artifactId>

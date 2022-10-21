@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.coding.flyin</groupId>
         <artifactId>flyin</artifactId>
-        <version>0.1.58</version>
+        <version>0.1.59</version>
     </parent>
 
     <artifactId>flyin-dependencies</artifactId>
@@ -486,6 +486,11 @@
             <dependency>
                 <groupId>com.coding.flyin</groupId>
                 <artifactId>flyin-identifier-spring-boot-starter</artifactId>
+                <version>${parentRevision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.coding.flyin</groupId>
+                <artifactId>fly-log-access-spring-boot-starter</artifactId>
                 <version>${parentRevision}</version>
             </dependency>
             <!-- 定义一方包 end -->
