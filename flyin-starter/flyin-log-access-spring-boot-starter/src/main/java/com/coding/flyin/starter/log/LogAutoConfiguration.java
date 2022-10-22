@@ -1,6 +1,7 @@
 package com.coding.flyin.starter.log;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import com.coding.flyin.starter.log.filter.RepeatedlyFilter;
 import com.coding.flyin.starter.log.interceptor.GlobalLogInterceptor;
 
 @Configuration
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @Import(GlobalLogInterceptor.class)
 public class LogAutoConfiguration {
 
