@@ -138,13 +138,17 @@ public class GlobalLogInterceptor implements HandlerInterceptor {
     private String getResponseBody(HttpServletResponse response) throws IOException {
         String contentType = response.getContentType();
         StringBuilder sb = new StringBuilder();
-        String requestBody;
+        String responseBody;
         if (MediaType.APPLICATION_JSON_VALUE.equals(contentType)) {
-            requestBody = new String(((RepeatedlyResponseWrapper)response).getResponseData(), StandardCharsets.UTF_8);
-            sb.append(requestBody);
+            // 避免内部错误 /error 时，response并不是RepeatedlyResponseWrapper类型
+            if (response instanceof RepeatedlyResponseWrapper) {
+                responseBody =
+                    new String(((RepeatedlyResponseWrapper)response).getResponseData(), StandardCharsets.UTF_8);
+                sb.append(responseBody);
+            }
         }
-        requestBody = sb.toString();
-        return requestBody;
+        responseBody = sb.toString();
+        return responseBody;
     }
 
     public LogAccesser.ResponseData getResponseData(HttpServletRequest request, HttpServletResponse response,
