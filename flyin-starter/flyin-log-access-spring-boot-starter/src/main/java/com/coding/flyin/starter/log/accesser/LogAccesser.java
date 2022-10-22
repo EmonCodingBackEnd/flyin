@@ -8,9 +8,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.servlet.ModelAndView;
+
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
 public interface LogAccesser {
 
@@ -30,25 +31,20 @@ public interface LogAccesser {
     default void after(HttpServletRequest request, HttpServletResponse response, RequestData requestData,
         ResponseData responseData) {};
 
-    @Getter
+    @Data
     @Builder
     class RequestData {
+        private String httpMethod;
+        private String requestUri;
         /**
          * 单位：毫秒
          */
         private long requestTime;
         private String queryString;
-        private String requestUri;
         private String requestParameter;
         private String requestBody;
         private List<RequestFile> requestFiles;
 
-        @Override
-        public String toString() {
-            return "RequestData{" + "requestTime=" + requestTime + ", queryString='" + queryString + '\''
-                + ", requestUri='" + requestUri + '\'' + ", requestParameter='" + requestParameter + '\''
-                + ", requestBody='" + requestBody + '\'' + ", requestFiles=" + requestFiles + '}';
-        }
     }
 
     @Data
@@ -59,7 +55,7 @@ public interface LogAccesser {
         private String fileContentType;
     }
 
-    @Getter
+    @Data
     @Builder
     class ResponseData {
         /**
@@ -70,12 +66,8 @@ public interface LogAccesser {
          * 单位：毫秒
          */
         private long costTime;
+        private ModelAndView modelAndView;
         private String responseBody;
 
-        @Override
-        public String toString() {
-            return "ResponseData{" + "responseTime=" + responseTime + ", costTime=" + costTime + ", responseBody='"
-                + responseBody + '\'' + '}';
-        }
     }
 }

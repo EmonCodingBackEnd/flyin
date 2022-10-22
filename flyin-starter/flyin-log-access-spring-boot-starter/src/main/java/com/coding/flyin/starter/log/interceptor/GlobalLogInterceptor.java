@@ -13,6 +13,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.coding.flyin.starter.log.accesser.LogAccesser;
 import com.coding.flyin.starter.log.common.LogConstants;
@@ -36,6 +37,13 @@ public class GlobalLogInterceptor implements HandlerInterceptor {
             log.error("parse requestData exception!", e);
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+        ModelAndView modelAndView) throws Exception {
+        request.setAttribute(LogConstants.LOG_RES_MODEL_AND_VIEW, modelAndView);
+        HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 
     @Override
@@ -117,9 +125,10 @@ public class GlobalLogInterceptor implements HandlerInterceptor {
         String requestParameter = getRequestParameter(request);
         String requestBody = getRequestBody(request);
         List<LogAccesser.RequestFile> requestFiles = getRequestFile(request);
-        LogAccesser.RequestData.RequestDataBuilder requestDataBuilder = LogAccesser.RequestData.builder()
-            .requestTime(System.currentTimeMillis()).requestUri(requestURI).queryString(queryString)
-            .requestParameter(requestParameter).requestBody(requestBody).requestFiles(requestFiles);
+        LogAccesser.RequestData.RequestDataBuilder requestDataBuilder =
+            LogAccesser.RequestData.builder().httpMethod(request.getMethod()).requestUri(requestURI)
+                .requestTime(System.currentTimeMillis()).queryString(queryString).requestParameter(requestParameter)
+                .requestBody(requestBody).requestFiles(requestFiles);
 
         LogAccesser.RequestData requestData = requestDataBuilder.build();
         request.setAttribute(LogConstants.LOG_REQ_DATA, requestData);
@@ -142,9 +151,11 @@ public class GlobalLogInterceptor implements HandlerInterceptor {
         LogAccesser.RequestData requestData) throws IOException {
         long beginTime = requestData.getRequestTime();
         long endTime = System.currentTimeMillis();
+        ModelAndView modelAndView = (ModelAndView)request.getAttribute(LogConstants.LOG_RES_MODEL_AND_VIEW);
         String responseBody = getResponseBody(response);
-        LogAccesser.ResponseData.ResponseDataBuilder requestDataBuilder = LogAccesser.ResponseData.builder()
-            .responseTime(System.currentTimeMillis()).costTime(endTime - beginTime).responseBody(responseBody);
+        LogAccesser.ResponseData.ResponseDataBuilder requestDataBuilder =
+            LogAccesser.ResponseData.builder().responseTime(System.currentTimeMillis()).costTime(endTime - beginTime)
+                .modelAndView(modelAndView).responseBody(responseBody);
         return requestDataBuilder.build();
     }
 }
