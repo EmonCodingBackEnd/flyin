@@ -25,7 +25,7 @@ public class DefaultLogAccesser implements LogAccesser {
 
     @Override
     public void after(HttpServletRequest request, HttpServletResponse response, RequestData requestData,
-        LogAccesser.ResponseData responseData) {
-        log.info("应答日志==>{}\n{}", requestData, responseData);
+        LogAccesser.ResponseData responseData, Exception ex) {
+        log.info(String.format("应答日志==>%s", responseData), ex);
     }
 }

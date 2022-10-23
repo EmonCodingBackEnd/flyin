@@ -53,7 +53,7 @@ public class GlobalLogInterceptor implements HandlerInterceptor {
             LogAccesser.RequestData requestData =
                 (LogAccesser.RequestData)request.getAttribute(LogConstants.LOG_REQ_DATA);
             LogAccesser.ResponseData responseData = getResponseData(request, response, requestData);
-            logAccesser.after(request, response, requestData, responseData);
+            logAccesser.after(request, response, requestData, responseData, ex);
         } catch (IOException e) {
             log.error("parse responseDate exception!", e);
         }

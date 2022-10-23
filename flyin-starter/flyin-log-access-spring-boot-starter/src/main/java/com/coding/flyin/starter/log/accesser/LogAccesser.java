@@ -26,10 +26,26 @@ public interface LogAccesser {
         return new ArrayList<>();
     }
 
+    /**
+     * 方法执行前处理
+     *
+     * @param request - 请求
+     * @param requestData - 请求数据
+     */
     default void before(HttpServletRequest request, RequestData requestData) {};
 
+    /**
+     * 方法执行后处理，无论是否异常，只要匹配到都会执行
+     *
+     * @param request - 请求
+     * @param response - 应答
+     * @param requestData - 请求数据
+     * @param responseData - 应答数据
+     * @param ex -
+     *            未配置自定义异常处理器（ExceptionHandlerExceptionResolver/ResponseStatusExceptionResolver/XXXHandlerExceptionResolver），或者自定义异常处理器无法处理时，才会有异常
+     */
     default void after(HttpServletRequest request, HttpServletResponse response, RequestData requestData,
-        ResponseData responseData) {};
+        ResponseData responseData, Exception ex) {};
 
     @Data
     @Builder
