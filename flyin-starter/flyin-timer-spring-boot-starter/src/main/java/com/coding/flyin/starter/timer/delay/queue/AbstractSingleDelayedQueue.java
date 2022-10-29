@@ -1,20 +1,27 @@
 package com.coding.flyin.starter.timer.delay.queue;
 
-import com.coding.flyin.starter.timer.PooledTimerTaskProperties;
-import com.coding.flyin.starter.timer.delay.DelayTask;
-import com.coding.flyin.starter.timer.delay.DelayedItem;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.MDC;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.StringUtils;
 
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.TimeUnit;
+import com.coding.flyin.core.config.FlyinConfigurerSupport;
+import com.coding.flyin.core.config.thread.ThreadContextSlot;
+import com.coding.flyin.starter.timer.PooledTimerTaskProperties;
+import com.coding.flyin.starter.timer.delay.DelayTask;
+import com.coding.flyin.starter.timer.delay.DelayedItem;
+
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 延时队列守护线程.
  *
- * <p>创建时间: <font style="color:#00FFFF">20180515 14:11</font><br>
+ * <p>
+ * 创建时间: <font style="color:#00FFFF">20180515 14:11</font><br>
  * [请在此输入功能详述]
  *
  * @author Rushing0711
@@ -29,12 +36,12 @@ public abstract class AbstractSingleDelayedQueue implements DelayedQueue {
     private final ThreadPoolTaskExecutor delayPoolQueueExecutor;
 
     /** 创建一个最初为空的新 DelayQueue */
-    private final DelayQueue<DelayedItem> delayedItems = new DelayQueue<>();
+    private final DelayQueue<DelayedItem<?>> delayedItems = new DelayQueue<>();
 
     private final String logPrefix;
 
-    public AbstractSingleDelayedQueue(
-            PooledTimerTaskProperties.Delay delay, ThreadPoolTaskExecutor delayPoolQueueExecutor) {
+    public AbstractSingleDelayedQueue(PooledTimerTaskProperties.Delay delay,
+        ThreadPoolTaskExecutor delayPoolQueueExecutor) {
         this.delay = delay;
         this.delayPoolQueueExecutor = delayPoolQueueExecutor;
 
@@ -47,7 +54,7 @@ public abstract class AbstractSingleDelayedQueue implements DelayedQueue {
         this.init();
     }
 
-    private DelayQueue<DelayedItem> getDelayedItems() {
+    private DelayQueue<DelayedItem<?>> getDelayedItems() {
         return delayedItems;
     }
 
@@ -58,24 +65,17 @@ public abstract class AbstractSingleDelayedQueue implements DelayedQueue {
 
     @Override
     public <T extends DelayTask> Integer size(@NonNull Class<T> clazz) {
-        return (int)
-                delayedItems.stream()
-                        .filter(
-                                e -> {
-                                    DelayTask delayTask = e.getTask();
-                                    if (delayTask == null) {
-                                        return false;
-                                    }
-                                    Class<?> clz = delayTask.getClass();
-                                    if (DelayMDCTaskDecorator.class.isAssignableFrom(clz)) {
-                                        clz =
-                                                ((DelayMDCTaskDecorator) delayTask)
-                                                        .getTarget()
-                                                        .getClass();
-                                    }
-                                    return clazz.isAssignableFrom(clz);
-                                })
-                        .count();
+        return (int)delayedItems.stream().filter(e -> {
+            DelayTask delayTask = e.getTask();
+            if (delayTask == null) {
+                return false;
+            }
+            Class<?> clz = delayTask.getClass();
+            if (DelayMDCTaskDecorator.class.isAssignableFrom(clz)) {
+                clz = ((DelayMDCTaskDecorator)delayTask).getTarget().getClass();
+            }
+            return clazz.isAssignableFrom(clz);
+        }).count();
     }
 
     @Override
@@ -96,8 +96,7 @@ public abstract class AbstractSingleDelayedQueue implements DelayedQueue {
         delayedItems.put(delayedItem);
     }
 
-    public Boolean putIfAbsent(
-            @NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
+    public Boolean putIfAbsent(@NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
         DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
         long nanoTime = TimeUnit.NANOSECONDS.convert(timeout, timeUnit);
         // 创建一个任务
@@ -139,11 +138,7 @@ public abstract class AbstractSingleDelayedQueue implements DelayedQueue {
                 }
             } while (success);
         }
-        log.info(
-                "【{}】任务已剔除出延迟队列,taskId={},removeCount={}",
-                logPrefix,
-                decorate.getTaskId(),
-                removeCount);
+        log.info("【{}】任务已剔除出延迟队列,taskId={},removeCount={}", logPrefix, decorate.getTaskId(), removeCount);
         return removeCount;
     }
 
@@ -160,18 +155,47 @@ public abstract class AbstractSingleDelayedQueue implements DelayedQueue {
         log.info("【{}守护线程】开启,thread={}", logPrefix, Thread.currentThread().getId());
         while (true) {
             // 阻塞式获取
-            DelayedItem item;
+            Exception exp = null;
+            DelayTask target = null;
+            DelayedItem<?> item;
             try {
                 item = getDelayedItems().take();
                 DelayTask task = item.getTask();
                 if (task == null) {
                     continue;
                 }
+                if (task instanceof DelayMDCTaskDecorator) {
+                    DelayMDCTaskDecorator decorator = (DelayMDCTaskDecorator)task;
+                    target = decorator.getTarget();
+                    MDC.setContextMap(decorator.getMDCEnvironment());
+                } else {
+                    target = task;
+                }
+                List<ThreadContextSlot> matchedSlots =
+                    FlyinConfigurerSupport.getThreadContextSlot(target.getClass(), true);
+                for (ThreadContextSlot threadContextSlot : matchedSlots) {
+                    threadContextSlot.beforeExecute();
+                }
+
                 log.info("【{}】任务已提取并加入线程池,taskId={}", logPrefix, task.getTaskId());
                 delayPoolQueueExecutor.execute(task);
+                if (task instanceof DelayMDCTaskDecorator) {
+                    DelayMDCTaskDecorator decorator = (DelayMDCTaskDecorator)task;
+                    remove(decorator);
+                }
             } catch (InterruptedException e) {
+                exp = e;
                 log.error(String.format("【%s守护线程】异常", logPrefix), e);
                 break;
+            } finally {
+                MDC.clear();
+                if (target != null) {
+                    List<ThreadContextSlot> matchedSlots =
+                        FlyinConfigurerSupport.getThreadContextSlot(target.getClass(), false);
+                    for (ThreadContextSlot threadContextSlot : matchedSlots) {
+                        threadContextSlot.afterExecute(exp);
+                    }
+                }
             }
         }
         log.info("【{}守护线程】关闭,thread={}", logPrefix, Thread.currentThread().getId());

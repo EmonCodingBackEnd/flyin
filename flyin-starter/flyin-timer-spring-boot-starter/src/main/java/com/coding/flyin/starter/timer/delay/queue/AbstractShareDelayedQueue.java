@@ -1,16 +1,18 @@
 package com.coding.flyin.starter.timer.delay.queue;
 
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
-import org.redisson.api.RMap;
+import org.redisson.api.RListMultimap;
 import org.redisson.api.RedissonClient;
 import org.slf4j.MDC;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.StringUtils;
 
+import com.coding.flyin.core.config.FlyinConfigurerSupport;
+import com.coding.flyin.core.config.thread.ThreadContextSlot;
 import com.coding.flyin.starter.timer.PooledTimerTaskProperties;
 import com.coding.flyin.starter.timer.delay.DelayTask;
 
@@ -30,13 +32,11 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
 
     private final String logPrefix;
 
-    private final RedissonClient redissonClient;
-    private final String mdcRedisKey;
+    // 延迟队列元素的伴生辅助对象，如果队列元素中引入了MDC，delayedQueue的contains方法便无法仅根据taskId判断元素是否存在了，利用该对象处理。
+    private final RListMultimap<String, Integer> delayedQueueCompanion;
 
-    AbstractShareDelayedQueue(
-            PooledTimerTaskProperties.Delay delay,
-            ThreadPoolTaskExecutor delayPoolQueueExecutor,
-            RedissonClient redissonClient) {
+    AbstractShareDelayedQueue(PooledTimerTaskProperties.Delay delay, ThreadPoolTaskExecutor delayPoolQueueExecutor,
+        RedissonClient redissonClient) {
         this.delay = delay;
         this.delayPoolQueueExecutor = delayPoolQueueExecutor;
         this.blockingFairQueue = redissonClient.getBlockingQueue(delay.getDelayTaskQueueRedisKey());
@@ -46,9 +46,8 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
             logPrefix = delay.getDelayTaskLogPrefix();
         }
         this.logPrefix = logPrefix;
-        this.redissonClient=redissonClient;
-        this.mdcRedisKey = delay.getDelayTaskQueueRedisKey().concat("MDC");
-
+        this.delayedQueueCompanion =
+            redissonClient.getListMultimap(delay.getDelayTaskQueueRedisKey().concat("companion"));
         this.init();
     }
 
@@ -59,44 +58,41 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
 
     @Override
     public <T extends DelayTask> Integer size(@NonNull Class<T> clazz) {
-        return (int)
-                delayedQueue.stream()
-                        .filter(
-                                e -> {
-                                    if (e == null) {
-                                        return false;
-                                    }
-                                    Class<?> clz = e.getClass();
-                                    if (DelayMDCTaskDecorator.class.isAssignableFrom(clz)) {
-                                        clz = ((DelayMDCTaskDecorator) e).getTarget().getClass();
-                                    }
-                                    return clazz.isAssignableFrom(clz);
-                                })
-                        .count();
+        return (int)delayedQueue.stream().filter(e -> {
+            if (e == null) {
+                return false;
+            }
+            Class<?> clz = e.getClass();
+            if (DelayMDCTaskDecorator.class.isAssignableFrom(clz)) {
+                clz = ((DelayMDCTaskDecorator)e).getTarget().getClass();
+            }
+            return clazz.isAssignableFrom(clz);
+        }).count();
     }
 
     @Override
     public boolean exists(@NonNull DelayTask delayTask) {
         DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
-        return delayedQueue.contains(decorate);
+        // return delayedQueue.contains(decorate);
+        return contains(decorate);
     }
 
     @Override
     public void put(@NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
         DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
-        storeMDC(delayTask);
         log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, decorate.getTaskId());
         delayedQueue.offer(decorate, timeout, timeUnit);
+        put(decorate);
     }
 
     @Override
-    public Boolean putIfAbsent(
-            @NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
+    public Boolean putIfAbsent(@NonNull DelayTask delayTask, long timeout, @NonNull TimeUnit timeUnit) {
         DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
-        if (!delayedQueue.contains(decorate)) {
-            storeMDC(delayTask);
+        // if (!delayedQueue.contains(decorate)) {
+        if (!contains(decorate)) {
             log.info("【{}】任务已加入延迟队列,taskId={}", logPrefix, decorate.getTaskId());
             delayedQueue.offer(decorate, timeout, timeUnit);
+            put(decorate);
             return true;
         } else {
             log.info("【{}】任务已存在于延迟队列,忽略再次加入,taskId={}", logPrefix, decorate.getTaskId());
@@ -107,9 +103,9 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
     @Override
     public Boolean remove(@NonNull DelayTask delayTask) {
         DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
-        clearMDC(delayTask);
         boolean success = delayedQueue.remove(decorate);
         if (success) {
+            remove(decorate);
             log.info("【{}】任务已剔除出延迟队列,taskId={}", logPrefix, decorate.getTaskId());
         } else {
             log.info("【{}】任务不存在于延迟队列,taskId={}", logPrefix, decorate.getTaskId());
@@ -121,21 +117,18 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
     public Integer removeUntilNone(DelayTask delayTask) {
         DelayMDCTaskDecorator decorate = new DelayMDCTaskDecorator(delayTask);
         int removeCount = 0;
-        if (delayedQueue.contains(decorate)) {
+        // if (delayedQueue.contains(decorate)) {
+        if (contains(decorate)) {
             boolean success;
             do {
                 success = delayedQueue.remove(decorate);
-                clearMDC(delayTask);
                 if (success) {
+                    remove(decorate);
                     removeCount++;
                 }
             } while (success);
         }
-        log.info(
-                "【{}】任务已剔除出延迟队列,taskId={},removeCount={}",
-                logPrefix,
-                decorate.getTaskId(),
-                removeCount);
+        log.info("【{}】任务已剔除出延迟队列,taskId={},removeCount={}", logPrefix, decorate.getTaskId(), removeCount);
         return removeCount;
     }
 
@@ -152,44 +145,56 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
         log.info("【分布式{}守护线程】开启,thread={}", logPrefix, Thread.currentThread().getId());
         while (true) {
             // 阻塞式获取
+            Exception exp = null;
+            DelayTask target = null;
             try {
                 DelayTask task = blockingFairQueue.take();
-                loadMDC(task);
+                if (task instanceof DelayMDCTaskDecorator) {
+                    DelayMDCTaskDecorator decorator = (DelayMDCTaskDecorator)task;
+                    target = decorator.getTarget();
+                    MDC.setContextMap(decorator.getMDCEnvironment());
+                } else {
+                    target = task;
+                }
+                List<ThreadContextSlot> matchedSlots =
+                    FlyinConfigurerSupport.getThreadContextSlot(target.getClass(), true);
+                for (ThreadContextSlot threadContextSlot : matchedSlots) {
+                    threadContextSlot.beforeExecute();
+                }
+
                 log.info("【分布式延时任务队列】任务已提取并加入线程池,taskId={}", task.getTaskId());
                 delayPoolQueueExecutor.execute(task);
+                if (task instanceof DelayMDCTaskDecorator) {
+                    DelayMDCTaskDecorator decorator = (DelayMDCTaskDecorator)task;
+                    remove(decorator);
+                }
             } catch (InterruptedException e) {
+                exp = e;
                 log.error("【分布式延时任务队列守护线程】异常", e);
                 break;
+            } finally {
+                MDC.clear();
+                if (target != null) {
+                    List<ThreadContextSlot> matchedSlots =
+                        FlyinConfigurerSupport.getThreadContextSlot(target.getClass(), false);
+                    for (ThreadContextSlot threadContextSlot : matchedSlots) {
+                        threadContextSlot.afterExecute(exp);
+                    }
+                }
             }
         }
         log.info("【分布式{}守护线程】关闭,thread={}", logPrefix, Thread.currentThread().getId());
     }
 
-
-
-    private void storeMDC(DelayTask delayTask) {
-        Map<String, String> MDCEnvironment = MDC.getCopyOfContextMap();
-        if (MDCEnvironment != null) {
-            RMap<String, Map<String, String>> mdcEnv = redissonClient.getMap(mdcRedisKey);
-            mdcEnv.put(delayTask.getTaskId(), MDCEnvironment);
-        }
+    private void put(DelayMDCTaskDecorator decorator) {
+        delayedQueueCompanion.put(decorator.getTaskIdentifier(), decorator.hashCode());
     }
 
-    private void clearMDC(DelayTask delayTask) {
-        Map<String, String> MDCEnvironment = MDC.getCopyOfContextMap();
-        if (MDCEnvironment != null) {
-            RMap<String, Map<String, String>> mdcEnv = redissonClient.getMap(mdcRedisKey);
-            mdcEnv.remove(delayTask.getTaskId());
-        }
+    private boolean contains(DelayMDCTaskDecorator decorator) {
+        return delayedQueueCompanion.containsKey(decorator.getTaskIdentifier());
     }
 
-    private void loadMDC(DelayTask delayTask) {
-        RMap<String, Map<String, String>> mdcEnv = redissonClient.getMap(mdcRedisKey);
-        if (mdcEnv.containsKey(delayTask.getTaskId())) {
-            Map<String, String> MDCEnvironment = mdcEnv.remove(delayTask.getTaskId());
-            if (delayTask instanceof DelayMDCTaskDecorator) {
-                ((DelayMDCTaskDecorator)delayTask).setMDCEnvironment(MDCEnvironment);
-            }
-        }
+    private void remove(DelayMDCTaskDecorator decorator) {
+        delayedQueueCompanion.remove(decorator.getTaskIdentifier(), decorator.hashCode());
     }
 }
