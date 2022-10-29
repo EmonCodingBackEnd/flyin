@@ -7,7 +7,7 @@
     <parent>
         <artifactId>flyin-starter</artifactId>
         <groupId>com.coding.flyin</groupId>
-        <version>0.1.60</version>
+        <version>0.1.61</version>
     </parent>
 
     <artifactId>fly-log-access-spring-boot-starter</artifactId>
