@@ -153,6 +153,7 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
                     DelayMDCTaskDecorator decorator = (DelayMDCTaskDecorator)task;
                     target = decorator.getTarget();
                     MDC.setContextMap(decorator.getMDCEnvironment());
+                    remove(decorator);
                 } else {
                     target = task;
                 }
@@ -164,10 +165,6 @@ public abstract class AbstractShareDelayedQueue implements DelayedQueue {
 
                 log.info("【分布式延时任务队列】任务已提取并加入线程池,taskId={}", task.getTaskId());
                 delayPoolQueueExecutor.execute(task);
-                if (task instanceof DelayMDCTaskDecorator) {
-                    DelayMDCTaskDecorator decorator = (DelayMDCTaskDecorator)task;
-                    remove(decorator);
-                }
             } catch (InterruptedException e) {
                 exp = e;
                 log.error("【分布式延时任务队列守护线程】异常", e);
