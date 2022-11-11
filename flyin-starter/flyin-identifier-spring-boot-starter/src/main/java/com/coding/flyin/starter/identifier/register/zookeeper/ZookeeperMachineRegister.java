@@ -22,6 +22,7 @@ import com.coding.flyin.starter.identifier.register.AbstractMachineRegister;
 import com.coding.flyin.starter.identifier.registry.RegistryCenter;
 import com.coding.flyin.starter.identifier.serialize.json.FastJsonSerializer;
 import com.coding.flyin.starter.identifier.serialize.json.JacksonSerializer;
+import com.coding.flyin.starter.identifier.util.HostUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -100,11 +101,42 @@ public class ZookeeperMachineRegister extends AbstractMachineRegister {
                         return zkNodeInfo;
                     }
                 }
+
+                /*
+                 * 如果能获取到本实例所在机器的IP和Port，当Ip和Port能匹配到某一个zkNodeInfo时，也认为可以复用
+                 */
+                String ip = HostUtils.getLocalIP();
+                Integer port = applicationProperties.getPort();
+                if (applicationProperties.isCacheable() && ip != null && port != null && children.size() > 0) {
+                    for (String machineIdStr : children) {
+                        int machineId = 0;
+                        try {
+                            machineId = Integer.parseInt(machineIdStr);
+                        } catch (NumberFormatException e) {
+                            log.warn(String.format("found exists machineId=%s is not number, skip this", machineId), e);
+                            continue;
+                        }
+                        String key = getNodePathKey(nodePath, machineId);
+                        String zkNodeInfoJson = registryCenter.get(key);
+                        NodeInfo zkNodeInfo = createNodeInfoFromJsonStr(zkNodeInfoJson);
+                        if (zkNodeInfo.getIp().equals(ip) && zkNodeInfo.getPort().equals(port)
+                                && applicationProperties.getGroup().equals(zkNodeInfo.getGroupName())) {
+                            // 更新ZK节点信息，保存本地缓存，开启定时上报任务
+                            nodePath.setMachineId(zkNodeInfo.getMachineId());
+                            zkNodeInfo.setUpdateTime(new Date());
+                            updateZookeeperNodeInfo(key, zkNodeInfo);
+                            saveLocalNodeInfo(zkNodeInfo);
+                            executeUploadNodeInfoTask(key, zkNodeInfo);
+                            return zkNodeInfo;
+                        }
+                    }
+                }
+
                 // 无本地信息或者缓存数据不匹配，开始向ZK申请节点机器ID
-                for (int workerId = 0; workerId < MAX_MACHINE_NUM; workerId++) {
-                    String workerIdStr = String.valueOf(workerId);
-                    if (!children.contains(workerIdStr)) { // 申请成功
-                        NodeInfo applyNodeInfo = createNodeInfo(nodePath.getGroupName(), workerId);
+                for (int machineId = 0; machineId < MAX_MACHINE_NUM; machineId++) {
+                    String machineIdStr = String.valueOf(machineId);
+                    if (!children.contains(machineIdStr)) { // 申请成功
+                        NodeInfo applyNodeInfo = createNodeInfo(nodePath.getGroupName(), machineId);
                         nodePath.setMachineId(applyNodeInfo.getMachineId());
                         // 保存ZK节点信息，保存本地缓存，开启定时上报任务
                         saveZookeeperNodeInfo(nodePath.getMachineIdPath(), applyNodeInfo);
