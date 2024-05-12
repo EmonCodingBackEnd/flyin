@@ -10,7 +10,7 @@
         <version>0.1.62</version>
     </parent>
 
-    <artifactId>fly-log-access-spring-boot-starter</artifactId>
+    <artifactId>flyin-log-access-spring-boot-starter</artifactId>
     <name>flyin-log-access-spring-boot-starter</name>
 
     <dependencies>
